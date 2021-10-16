@@ -38,7 +38,7 @@ def start(update: Update, context: CallbackContext) -> None:
 
     logger.info(f'{playerName} started the bot with chat_id {players[playerName].chat_id}')
 
-    update.message.reply_text(f'Hi! {messages.HELP_TEXT}')
+    update.message.reply_text(f'Hi!! {messages.HELP_TEXT}')
 
 
 def help_command(update: Update, context: CallbackContext) -> None:
@@ -164,7 +164,7 @@ def sendAngel(update: Update, context: CallbackContext):
 
     logger.info(messages.getSentMessageLog(config.ANGEL_ALIAS, playerName, players[playerName].angel.username))
 
-    return ConversationHandler.END
+    return ANGEL
 
 
 def sendMortal(update: Update, context: CallbackContext):
@@ -186,7 +186,7 @@ def sendMortal(update: Update, context: CallbackContext):
 
     logger.info(messages.getSentMessageLog(config.MORTAL_ALIAS, playerName, players[playerName].mortal.username))
 
-    return ConversationHandler.END
+    return MORTAL
 
 
 def cancel(update: Update, context: CallbackContext) -> int:
