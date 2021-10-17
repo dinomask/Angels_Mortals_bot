@@ -1,6 +1,5 @@
 import logging
 
-import botclass
 import player
 import messagesdualbot
 import datetime
@@ -10,7 +9,6 @@ import configdualbot
 import telegram
 import dload ##important for parsing JSON htmls; to enable bot forwarding of images between bots
 import requests
-import json
 
 class Response(): ##Class for Telegram files
     def __init__(self):
