@@ -12,6 +12,8 @@ HELP_TEXT_MORTAL = (
     f'This bot supports forwarding text, photos, stickers, documents, audio, video, and animations but not emojis.'
     f'\n\n'
     f'Type /mortal to see who your mortal is!'
+    f'\n\n'
+    f"Type /start if your messages aren't getting sent"
 )
 ERROR_CHAT_ID = 'Sorry an error occurred please type /start again'
 SEND_COMMAND = 'Send a message to my:\n'
