@@ -1,3 +1,7 @@
+'''
+Use this bot only if you want to run 1 bot for private messaging
+'''
+
 import logging
 import player
 import messages
@@ -38,7 +42,7 @@ def start(update: Update, context: CallbackContext) -> None:
 
     logger.info(f'{playerName} started the bot with chat_id {players[playerName].chat_id}')
 
-    update.message.reply_text(f'Hi!! {messages.HELP_TEXT}')
+    update.message.reply_text(f'Hi! {messages.HELP_TEXT}')
 
 
 def help_command(update: Update, context: CallbackContext) -> None:
@@ -98,9 +102,13 @@ def startMortal(update: Update, context: CallbackContext):
     update.callback_query.message.reply_text(messages.getPlayerMessage(config.MORTAL_ALIAS))
     return MORTAL
 
-
+ANGEL_BOT_TOKEN = config.ANGEL_BOT_TOKEN ##REMOVE. FOR TESTING PURPOSES
 def sendNonTextMessage(message, bot, chat_id):
     if message.photo:
+        print (message.photo)
+        fileid = message.photo[-1]["file_id"]#######REMOVE
+        response =  f"https://api.telegram.org/bot{ANGEL_BOT_TOKEN}/getFile?file_id=AgACAgUAAxkBAAICD2FrmZ-jnjpWJY4XIGIHCQal5X3lAAL7sDEb2FZYVwZB8PbnNsibAQADAgADeQADIQQ" #######REMOVE
+        logger.info(f"{fileid} // {response}")#######REMOVE
         bot.send_photo(
             photo=message.photo[-1],
             caption=message.caption,

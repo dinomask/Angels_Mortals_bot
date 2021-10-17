@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 class Player():
     def __init__(self):
         self.username = None
+        self.name = None
         self.angel = None
         self.mortal = None
         self.chat_id = None
@@ -32,7 +33,7 @@ def loadPlayers(players: dict):
                 players[playerName].mortal = players[mortalName]
                 line_count += 1
         logger.info(f'Processed {line_count} lines.')
-
+    savemortalUsername(players)
     validatePairings(players)
     loadChatID(players)
 
@@ -47,23 +48,46 @@ def validatePairings(players: dict):
     logger.info(f'Validation complete, no issues with pairings.')
 
 
-def saveChatID(players: dict):
+def savemortalUsername(players: dict): ##Important for mortal_command
     temp = {}
     for k, v in players.items():
+        temp[k] = v.mortal.username
+
+    with open(config.MORTAL_USERNAME_JSON, 'w+') as f:
+        json.dump(temp, f)
+
+def saveChatID(players: dict):
+    temp = {}
+    temp2 = {}
+    for k, v in players.items():
         temp[k] = v.chat_id
+        temp2[k] = v.first_name
 
     with open(config.CHAT_ID_JSON, 'w+') as f:
         json.dump(temp, f)
 
+    with open(config.FIRST_NAME_JSON, 'w+') as f: ##saves first_names too
+        json.dump(temp2, f)
 
 def loadChatID(players: dict):
     try:
         with open(config.CHAT_ID_JSON, 'r') as f:
             temp = json.load(f)
-
             logger.info(temp)
-
             for k, v in temp.items():
                 players[k].chat_id = v
+
+        with open(config.NAME_JSON, 'r') as f: ##loads first_names too
+            temp = json.load(f)
+            logger.info(temp)
+            for k, v in temp.items():
+                players[k].name = v
+
+        with open(config.MORTAL_USERNAME_JSON, 'r') as f:
+            temp = json.load(f)
+            logger.info(temp)
+            for k, v in temp.items():
+                players[k].mortal.username = v
+
     except:
         logger.warn('Fail to load chat ids')
