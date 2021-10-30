@@ -33,7 +33,7 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 2. Options to see Angel and Mortal's two truths one lie, self-introduction, and interests within the bots
 - However, self-introduction was not added for Angels to prevent Mortals from identifying their Angels too easily
 ####
-- Added "Who is my mortal?" Option to see their mortal's Telegram username & gender
+- Added "Who is my mortal?" option to see their mortal's Telegram username & gender
 ####
 - Added read_csv functions to save the aforementioned properties (e.g. interests) into the Player objects
 
