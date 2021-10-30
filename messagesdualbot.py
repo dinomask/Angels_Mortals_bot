@@ -1,4 +1,4 @@
-import config
+import configdualbot
 
 MESSAGE_SENT = 'Message sent!'
 HELP_TEXT_ANGEL = (
@@ -6,26 +6,29 @@ HELP_TEXT_ANGEL = (
     f'\n\n'
     f"Type /start if your messages aren't getting sent"
     f'\n\n'
-    f'Please click the button below to start messaging your {config.ANGEL_ALIAS}!'
+    f'Please click the buttons below to find out more about your {configdualbot.ANGEL_ALIAS}\n\n'
+    f'After that, you may click the button below to start messaging your {configdualbot.ANGEL_ALIAS} anonymously!'
 )
 HELP_TEXT_MORTAL = (
     f'This bot supports forwarding text, emojis, photos, stickers, documents, audio, videos, and animations.'
     f'\n\n'
-    f'Type /mortal to see who your mortal is!'
-    f'\n'
-    f"Type /start if your messages aren't getting sent"
-    f'\n\n'
-    f'Please click the button below to start messaging your {config.MORTAL_ALIAS}!'
+    f'Please click the buttons below to find out more about your {configdualbot.MORTAL_ALIAS}\n\n'
+    f'After that, you may click the button below to start messaging your {configdualbot.MORTAL_ALIAS} anonymously!'
 )
-ERROR_CHAT_ID = 'Sorry an error occurred please type /start again'
-SEND_COMMAND = 'Send a message to my:\n'
-NOT_REGISTERED = 'Sorry you are not registered with the game currently'
+ERROR_CHAT_ID = f'Sorry an error occurred please type /start again'
+# SEND_COMMAND = f'Send a message to my:\n'
+NOT_REGISTERED = f'Sorry you are not registered with the game currently'
+def STOPPED_BOT(alias):
+    return f'Sorry your {alias} has stopped the bot. He/she must restart it for your messages to be sent.\n\nYou may now click the other buttons.'
 
 def getBotNotStartedMessage(alias):
-    return f'Sorry your {alias} has not started this bot'
+    return f'Sorry your {alias} has not started this bot yet.\n' \
+           f'Please try again later.'
 
 def getPlayerMessage(alias):
-    return f'From now on, all your messages will be sent to you {alias}\n\nHave fun chatting!'
+    return f'From now on, all your messages will be sent to your {alias}. Have fun chatting!\n\n' \
+           f'Type /cancel if you want to go back and find out more about your {alias}\n\n'
+           # f"Type /start again if your messages somehow aren't getting sent"
 
 '''
 not used in dualbot
