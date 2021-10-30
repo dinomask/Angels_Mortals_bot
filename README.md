@@ -67,6 +67,13 @@ CHAT_ID_JSON = os.environ['CHAT_ID_JSON']
 ANGEL_ALIAS = os.environ['ANGEL_ALIAS']
 MORTAL_ALIAS = os.environ['MORTAL_ALIAS']
 
-Calling 'Angels' & 'Mortals' too mainstream for you? Change them in the os.environ 'ANGEL_ALIAS' or 'MORTAL_ALIAS' to something else for more spice!\
+Calling 'Angels' & 'Mortals' too mainstream for you? Change them in the os.environ 'ANGEL_ALIAS' or 'MORTAL_ALIAS' to something else!\
 _(Special thanks to Kingston Kuan for this idea)_
+
+### If you only want a single bot purely for the messaging 
+Run bot.py instead.
+
+The files: **bot.py**, **config.py**, and **messages.py** are meant solely for the single bot and can be deleted if you only want the dual bot functionality.
+
+Most of the code for the single bot is from **Kingston Kuan** (I have only made few minor changes and have not added the special functions of the dual bot).
 
