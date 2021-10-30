@@ -38,6 +38,7 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 - Added read_csv functions to save the aforementioned properties (e.g. interests) into the Player objects
 
 ##Instructions
+
 ###How to format .csv file input & run bot
 1. Put a header row in the following order
 
