@@ -16,7 +16,7 @@ NUS Aphrodite matchmaking uses interests, two truths one lie to break the ice to
 
 
 ### Accreditation
-Special thanks to Kingston Kuan for his "How to make an Angels & Mortals Telegram Bot" guide! I have literally nil coding experience and his structured coding was easy to interpret and learn about the Telegram python module so I could work on it further. Please check out his article if you want to learn the basics of how this bot works! https://chatbotslife.com/building-a-chatbot-for-angel-mortal-5d389ab7acde
+Special thanks to **Kingston Kuan** for his ***"How to make an Angels & Mortals Telegram Bot"*** guide! I have literally nil coding experience and his structured coding was easy to interpret and learn about the Telegram python module so I could work on it further. Please check out his article if you want to learn the basics of how this bot works! https://chatbotslife.com/building-a-chatbot-for-angel-mortal-5d389ab7acde
 
 
 
