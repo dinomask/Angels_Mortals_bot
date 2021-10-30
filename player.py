@@ -47,7 +47,6 @@ def loadPlayers(players: dict):
                 players[playerName].twotruthsonelie = twotruthsonelie
                 players[playerName].introduction = introduction
                 line_count += 1
-                # logger.info(f'Processed {players[playerName].angel.mortal} & {players[playerName].mortal.angel}.')
         logger.info(f'Basic information processed for {line_count} lines.')
     '''
     With the basic information processed, we can now match the Player objects together through Angel-Mortal pairings
