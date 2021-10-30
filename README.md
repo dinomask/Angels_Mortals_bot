@@ -27,7 +27,7 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ####
 - **SUPPORTS FORWARDING photos, stickers, documents, audio, videos, and animations:** dual bots were more tricky to forward messages than with a single bot. Initally only forwarding texts worked, so I added code to download these non-text messages directly from Telegram's servers so these could be forwarded too.
 ####
-- **only requires /start on ONE of either bots to start receiving messages:** Alternatively, you may simply type any text and it will be the same as "/start"
+- **only requires /start on ONE of either bot to start receiving messages:** Alternatively, you may simply type any text and it will be the same as "/start"
 
 
 2. Options to see Angel and Mortal's two truths one lie, self-introduction, and interests within the bots
