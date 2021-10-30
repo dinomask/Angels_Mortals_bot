@@ -7,7 +7,7 @@ Start off anonymous except that your interests, two truths and one lie, and a se
 All you need is to collect the Telegram usernames, gender, interests, two truths and one lie, and their self-intro to start playing the game!
 
 
-###Personal thoughts
+### Personal thoughts
 - I felt that revealing the gender was important to contextualise the conversation
 - Interests, two truths and one lie & self-intro were added to encourage people to break the ice & start the conversation.\
 I felt these info were **essential** with the COVID19 restrictions & online learning, as students may never be able to physically meet each other.
@@ -37,9 +37,9 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ####
 - Added read_csv functions to save the aforementioned properties (e.g. interests) into the Player objects
 
-##Instructions
+## Instructions
 
-###How to format .csv file input & run bot
+### How to format .csv file input & run bot
 1. Put a header row in the following order
 
 ***"playerlist.csv" input file header columns:***
