@@ -41,13 +41,13 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ###How to format .csv file input & run bot
 1. Put a header row in the following order
 
-***.csv input file header columns:***
+***"playerlist.csv" input file header columns:***
 ```
 Player,Angel,Mortal,Gender,Interests,Twotruthsonelie,Introduction 
 ```
 2. Ensure the data in the subequent rows matches the columns
 
-***HEADERLESS CSV named as "playerlist.csv":***
+***Data in "playerlist.csv" (excluding 1st-row headers):***
 ```
 username1,username2,username3,Male,interests1,twotruthsonelie1,intro1
 username2,username3,username1,Female,interests2,twotruthsonelie2,intro2
