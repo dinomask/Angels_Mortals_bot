@@ -60,12 +60,12 @@ username3,username1,username2,Male,interests3,twotruthsonelie3,intro3
 4. Run dualbot.py 
 
 ### Environment variables required
-MORTAL_BOT_TOKEN = os.environ['MORTAL_BOT_TOKEN']
-ANGEL_BOT_TOKEN = os.environ['ANGEL_BOT_TOKEN']
-PLAYERS_FILENAME = os.environ['PLAYERS_FILENAME']
-CHAT_ID_JSON = os.environ['CHAT_ID_JSON']
-ANGEL_ALIAS = os.environ['ANGEL_ALIAS']
-MORTAL_ALIAS = os.environ['MORTAL_ALIAS']
+MORTAL_BOT_TOKEN = os.environ['MORTAL_BOT_TOKEN']\
+ANGEL_BOT_TOKEN = os.environ['ANGEL_BOT_TOKEN']\
+PLAYERS_FILENAME = os.environ['PLAYERS_FILENAME']\
+CHAT_ID_JSON = os.environ['CHAT_ID_JSON']\
+ANGEL_ALIAS = os.environ['ANGEL_ALIAS']\
+MORTAL_ALIAS = os.environ['MORTAL_ALIAS']\
 
 Calling 'Angels' & 'Mortals' too mainstream for you? Change them in the os.environ 'ANGEL_ALIAS' or 'MORTAL_ALIAS' to something else!\
 _(Special thanks to Kingston Kuan for this idea)_
