@@ -11,7 +11,7 @@ SEND_COMMAND = 'Send a message to my:\n(/cancel to stop)'
 NOT_REGISTERED = 'Sorry you are not registered with the game currently'
 
 def getBotNotStartedMessage(alias):
-    return f'Sorry your {alias} has not started this bot'
+    return f'Sorry your {alias} has not started this bot. Please try again later'
 
 def getPlayerMessage(alias):
     return f'Please type your message to your {alias}\n(/cancel to stop)'

@@ -1,5 +1,5 @@
 '''
-Use this bot only if you want to run 1 bot for private messaging
+Use this bot only if you want to run 1 bot for private messaging!
 '''
 
 import logging
