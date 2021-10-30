@@ -54,6 +54,7 @@ username1,username2,username3,Male,interests1,twotruthsonelie1,intro1
 username2,username3,username1,Female,interests2,twotruthsonelie2,intro2
 username3,username1,username2,Male,interests3,twotruthsonelie3,intro3
 ```
+where the usernames are Telegram usernames without the "@".
 
 3. Put the "playerlist.csv" in the root folder with all the other python scripts (e.g. dualbot.py)
 
