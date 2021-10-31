@@ -11,6 +11,9 @@ from telegram import ParseMode
 import dload  ##important for parsing JSON htmls; to enable bot forwarding of images between bots
 import requests
 
+import os ##for heroku setup
+PORT = int(os.environ.get('PORT', '8443')) ##for heroku setup. See https://github.com/python-telegram-bot/python-telegram-bot/wiki/Webhooks#heroku
+
 
 class Response():  ##Class for Telegram files
     def __init__(self):
@@ -39,6 +42,7 @@ logger = logging.getLogger(__name__)
 
 ANGEL_BOT_TOKEN = configdualbot.ANGEL_BOT_TOKEN
 MORTAL_BOT_TOKEN = configdualbot.MORTAL_BOT_TOKEN
+herokuappname = configdualbot.herokuappname
 
 players = collections.defaultdict(player.Player)
 player.loadPlayers(players)  ##loads back the Telegram chat ids after bot is shut down once
@@ -459,8 +463,21 @@ def main():
     dispatcherAngel.add_handler(conv_handler_Angel)
 
     # Start the Bot
-    updaterMortal.start_polling()
-    updaterAngel.start_polling()
+    # updaterMortal.start_polling()
+    # updaterAngel.start_polling()
+    '''
+    The next paragraph of codes replace "updater.start_polling()" 
+    to enable listening to webhooks on heroku. See https://towardsdatascience.com/how-to-deploy-a-telegram-bot-using-heroku-for-free-9436f89575d2 for information.
+    '''
+    updaterMortal.start_webhook(listen="0.0.0.0",
+                          port=PORT,
+                          url_path=MORTAL_BOT_TOKEN,
+                          webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
+
+    updaterAngel.start_webhook(listen="0.0.0.0",
+                          port=PORT,
+                          url_path=ANGEL_BOT_TOKEN,
+                          webhook_url=f'https://{herokuappname}.herokuapp.com/{ANGEL_BOT_TOKEN}')
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
