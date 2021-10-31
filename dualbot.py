@@ -8,10 +8,11 @@ import collections
 import configdualbot
 import telegram
 from telegram import ParseMode
-import dload ##important for parsing JSON htmls; to enable bot forwarding of images between bots
+import dload  ##important for parsing JSON htmls; to enable bot forwarding of images between bots
 import requests
 
-class Response(): ##Class for Telegram files
+
+class Response():  ##Class for Telegram files
     def __init__(self):
         self.ok = None
         self.result = {}
@@ -40,7 +41,7 @@ ANGEL_BOT_TOKEN = configdualbot.ANGEL_BOT_TOKEN
 MORTAL_BOT_TOKEN = configdualbot.MORTAL_BOT_TOKEN
 
 players = collections.defaultdict(player.Player)
-player.loadPlayers(players) ##loads back the Telegram chat ids after bot is shut down once
+player.loadPlayers(players)  ##loads back the Telegram chat ids after bot is shut down once
 
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -49,14 +50,14 @@ def start_Angelbot(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /start is issued."""
     playerName = update.message.chat.username.lower()
 
-
     if players[playerName].username is None:
         update.message.reply_text(messagesdualbot.NOT_REGISTERED)
         return
 
     players[playerName].chat_id = update.message.chat.id
+    player.saveChatID(players)
 
-    if players[playerName].chat_id is None:     ##just in case
+    if players[playerName].chat_id is None:  ##just in case
         update.message.reply_text(messagesdualbot.ERROR_CHAT_ID)
         return
 
@@ -65,11 +66,13 @@ def start_Angelbot(update: Update, context: CallbackContext) -> None:
     send_menu_Angel = [
         [InlineKeyboardButton(f"Talk to my {configdualbot.ANGEL_ALIAS}", callback_data='messageangel')],
         [InlineKeyboardButton(f"Who is my {configdualbot.ANGEL_ALIAS}?", callback_data='whoismyangel'),
-        InlineKeyboardButton(f"My {configdualbot.ANGEL_ALIAS}'s interests", callback_data='angelinterests')],
-        [InlineKeyboardButton(f"My {configdualbot.ANGEL_ALIAS}'s Two truths and one lie", callback_data='angeltwotruthsonelie')],
+         InlineKeyboardButton(f"My {configdualbot.ANGEL_ALIAS}'s interests", callback_data='angelinterests')],
+        [InlineKeyboardButton(f"My {configdualbot.ANGEL_ALIAS}'s Two truths and one lie",
+                              callback_data='angeltwotruthsonelie')],
     ]
     reply_markup_Angel = InlineKeyboardMarkup(send_menu_Angel)
-    update.message.reply_text(f'Hi {update.message.chat.first_name}! {messagesdualbot.HELP_TEXT_ANGEL}', reply_markup=reply_markup_Angel)
+    update.message.reply_text(f'Hi {update.message.chat.first_name}! {messagesdualbot.HELP_TEXT_ANGEL}',
+                              reply_markup=reply_markup_Angel)
 
     return CHOOSING
 
@@ -79,25 +82,29 @@ def start_Mortalbot(update: Update, context: CallbackContext) -> None:
     playerName = update.message.chat.username.lower()
     if players[playerName].username is None:
         update.message.reply_text(messagesdualbot.NOT_REGISTERED)
-        return ##returns whatever state it previously was at
+        return  ##returns whatever state it previously was at
 
     players[playerName].chat_id = update.message.chat.id
+    player.saveChatID(players)
 
-    if players[playerName].chat_id is None: ##just in case
+    if players[playerName].chat_id is None:  ##just in case
         update.message.reply_text(messagesdualbot.ERROR_CHAT_ID)
-        return ##returns whatever state it previously was at
+        return  ##returns whatever state it previously was at
 
     logger.info(f'{playerName} started the bot with chat_id {players[playerName].chat_id}')
 
     send_menu_Mortal = [
-        [InlineKeyboardButton(f"Talk to my {configdualbot.MORTAL_ALIAS}", callback_data='messagemortal')], ##NOTE: Do not put "mortal" as callback_data, or else other callback_data starting with "mortal" will not work anymore.
+        [InlineKeyboardButton(f"Talk to my {configdualbot.MORTAL_ALIAS}", callback_data='messagemortal')],
+        ##NOTE: Do not put "mortal" as callback_data, or else other callback_data starting with "mortal" will not work anymore.
         [InlineKeyboardButton(f"Who is my {configdualbot.MORTAL_ALIAS}?", callback_data='whoismymortal'),
-        InlineKeyboardButton(f"My {configdualbot.MORTAL_ALIAS}'s interests", callback_data='mortalinterests')],
-        [InlineKeyboardButton(f"My {configdualbot.MORTAL_ALIAS}'s Two truths and one lie", callback_data='mortaltwotruthsonelie')],
+         InlineKeyboardButton(f"My {configdualbot.MORTAL_ALIAS}'s interests", callback_data='mortalinterests')],
+        [InlineKeyboardButton(f"My {configdualbot.MORTAL_ALIAS}'s Two truths and one lie",
+                              callback_data='mortaltwotruthsonelie')],
         [InlineKeyboardButton(f"My {configdualbot.MORTAL_ALIAS}'s self-intro", callback_data='mortalintroduction')],
     ]
     reply_markup_Mortal = InlineKeyboardMarkup(send_menu_Mortal)
-    update.message.reply_text(f'Hi {update.message.chat.first_name}! {messagesdualbot.HELP_TEXT_MORTAL}', reply_markup=reply_markup_Mortal)
+    update.message.reply_text(f'Hi {update.message.chat.first_name}! {messagesdualbot.HELP_TEXT_MORTAL}',
+                              reply_markup=reply_markup_Mortal)
 
     return CHOOSING
 
@@ -105,6 +112,7 @@ def start_Mortalbot(update: Update, context: CallbackContext) -> None:
 def help_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /help is issued."""
     update.message.reply_text(messagesdualbot.HELP_TEXT_ANGEL)
+
 
 def reload_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /savechatids is issued."""
@@ -114,73 +122,102 @@ def reload_command(update: Update, context: CallbackContext) -> None:
     logger.info(f'Players reloaded')
     update.message.reply_text(f'Players reloaded')
 
+
 '''
 /mortal command is replaced with InlineKeyboardButton "Who is my mortal?". Ignore code below
 '''
+
+
 # def mortal_command(update: Update, context: CallbackContext) -> None:
 #     """Send a message when the command /mortal is issued."""
 #     playerName = update.message.chat.username.lower()
 #     update.message.reply_text(f"Your mortal is @{players[playerName].mortal.username}, Gender: {players[playerName].mortal.gender}")
 
 
-
-
 def startAngel(update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
     if players[playerName].angel.chat_id is None:
         update.callback_query.message.reply_text(messagesdualbot.getBotNotStartedMessage(configdualbot.ANGEL_ALIAS))
-        logger.info(messagesdualbot.getNotRegisteredLog(configdualbot.ANGEL_ALIAS, playerName, players[playerName].angel.username))
+        logger.info(messagesdualbot.getNotRegisteredLog(configdualbot.ANGEL_ALIAS, playerName,
+                                                        players[playerName].angel.username))
         return CHOOSING
 
     update.callback_query.message.reply_text(messagesdualbot.getPlayerMessage(configdualbot.ANGEL_ALIAS))
     return ANGEL
 
-def whoismyAngel (update: Update, context: CallbackContext):
+
+def whoismyAngel(update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
-    update.callback_query.message.reply_text(f"That's for you to find out! But I can tell you the Gender: <b>{players[playerName].angel.gender}</b>", parse_mode=ParseMode.HTML)
+    update.callback_query.message.reply_text(
+        f"That's for you to find out! But I can tell you the Gender: <b>{players[playerName].angel.gender}</b>",
+        parse_mode=ParseMode.HTML)
     return CHOOSING
+
 
 def angelInterests(update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
-    update.callback_query.message.reply_text(f"<u>Your {configdualbot.ANGEL_ALIAS}'s interests:</u>\n\n{players[playerName].angel.interests}", parse_mode=ParseMode.HTML)
+    update.callback_query.message.reply_text(
+        f"<u>Your {configdualbot.ANGEL_ALIAS}'s interests:</u>\n\n{players[playerName].angel.interests}",
+        parse_mode=ParseMode.HTML)
     return CHOOSING
+
 
 def angelTwotruthsonelie(update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
-    update.callback_query.message.reply_text(f"<b>Your {configdualbot.ANGEL_ALIAS}'s Two truths and one lie:</b>\n\n{players[playerName].angel.twotruthsonelie}", parse_mode=ParseMode.HTML)
+    update.callback_query.message.reply_text(
+        f"<b>Your {configdualbot.ANGEL_ALIAS}'s Two truths and one lie:</b>\n\n{players[playerName].angel.twotruthsonelie}",
+        parse_mode=ParseMode.HTML)
     return CHOOSING
+
 
 def startMortal(update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
     if players[playerName].mortal.chat_id is None:
         update.callback_query.message.reply_text(messagesdualbot.getBotNotStartedMessage(configdualbot.MORTAL_ALIAS))
-        logger.info(messagesdualbot.getNotRegisteredLog(configdualbot.MORTAL_ALIAS, playerName, players[playerName].mortal.username))
+        logger.info(messagesdualbot.getNotRegisteredLog(configdualbot.MORTAL_ALIAS, playerName,
+                                                        players[playerName].mortal.username))
         return CHOOSING
 
     update.callback_query.message.reply_text(messagesdualbot.getPlayerMessage(configdualbot.MORTAL_ALIAS))
     return MORTAL
 
+
 def whoismyMortal(update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
-    update.callback_query.message.reply_text(f"Your {configdualbot.MORTAL_ALIAS} is @{players[playerName].mortal.username}, Gender: <b>{players[playerName].mortal.gender}</b>", parse_mode=ParseMode.HTML)
+    update.callback_query.message.reply_text(
+        f"Your {configdualbot.MORTAL_ALIAS} is @{players[playerName].mortal.username}, Gender: <b>{players[playerName].mortal.gender}</b>",
+        parse_mode=ParseMode.HTML)
     return CHOOSING
+
 
 def mortalInterests(update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
-    update.callback_query.message.reply_text(f"<u>Your {configdualbot.MORTAL_ALIAS}'s interests:</u>\n\n{players[playerName].mortal.interests}", parse_mode=ParseMode.HTML)
+    update.callback_query.message.reply_text(
+        f"<u>Your {configdualbot.MORTAL_ALIAS}'s interests:</u>\n\n{players[playerName].mortal.interests}",
+        parse_mode=ParseMode.HTML)
     return CHOOSING
+
 
 def mortalTwotruthsonelie(update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
-    update.callback_query.message.reply_text(f"<b>Your {configdualbot.MORTAL_ALIAS}'s Two truths and one lie:</b>\n\n{players[playerName].mortal.twotruthsonelie}", parse_mode=ParseMode.HTML)
+    update.callback_query.message.reply_text(
+        f"<b>Your {configdualbot.MORTAL_ALIAS}'s Two truths and one lie:</b>\n\n{players[playerName].mortal.twotruthsonelie}",
+        parse_mode=ParseMode.HTML)
     return CHOOSING
+
+
 '''
 I decided to only let angels see the introduction of mortals but not vice versa to prevent easy identification of angels to mortals.
 '''
+
+
 def mortalIntroduction(update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
-    update.callback_query.message.reply_text(f"<b>Your {configdualbot.MORTAL_ALIAS}'s self-intro:</b>\n\n{players[playerName].mortal.introduction}", parse_mode=ParseMode.HTML)
+    update.callback_query.message.reply_text(
+        f"<b>Your {configdualbot.MORTAL_ALIAS}'s self-intro:</b>\n\n{players[playerName].mortal.introduction}",
+        parse_mode=ParseMode.HTML)
     return CHOOSING
+
 
 '''
 message.photo example output:
@@ -189,19 +226,24 @@ message.photo[-1] example output:
 {'file_size': 126249, 'width': 720, 'file_unique_id': 'AQAD-7AxG9hWWFd-', 'file_id': 'AgACAgUAAxkBAAICG2FrmmQrkdsQZXXatT32MAG6_Z71AAL7sDEb2FZYVwZB8PbnNsibAQADAgADeQADIQQ', 'height': 1280}
 '''
 
-def sendNonTextMessageMortal(message, bot, chat_id):
+
+def grabResponse(file_id, token):
+    response = f"https://api.telegram.org/bot{token}/getFile?file_id={file_id}"
+    logger.info(f"{file_id} // {response}")
+    j = dload.json(response)
+    logger.info(dload.json(response))
+    filepath = j["result"]["file_path"]
+    htmllink = f"https://api.telegram.org/file/bot{token}/{filepath}"
+    response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
+    # Use response2.content to get the string, then pass the bytes into the argument instead! :)
+    logger.info(f"{filepath} // {htmllink}")
+    return response2, filepath
+
+
+def sendNonTextMessage(message, bot, chat_id, token):
     if message.photo:
         fileid = message.photo[-1]["file_id"]
-        response = f"https://api.telegram.org/bot{MORTAL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{MORTAL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the bytes, then pass the bytes into the argument instead! :)
-        logger.info(f"{filepath} // {htmllink}")
+        response2, filepath = grabResponse(fileid, token)
         bot.send_photo(
             photo=response2.content,
             caption=message.caption,
@@ -214,34 +256,18 @@ def sendNonTextMessageMortal(message, bot, chat_id):
         )
     elif message.document:
         fileid = message.document["file_id"]
-        response = f"https://api.telegram.org/bot{MORTAL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{MORTAL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.text to get the string, then pass the bytes into the argument instead! :)
-        response2.encoding = 'utf-8' ##explicit encoding by setting .encoding before accessing .text
+        response2, filepath = grabResponse(fileid, token)
+        response2.encoding = 'utf-8'  ##explicit encoding by setting .encoding before accessing .text
         bot.send_document(
             document=response2.content,
-            filename=f"{filepath.split('/')[-1]}", ##sending in bytes loses the file name & file type. Not perfect, but this is probably the best solution.
+            filename=f"{filepath.split('/')[-1]}",
+            ##sending in bytes loses the file name & file type. Not perfect, but this is probably the best solution.
             caption=message.caption,
             chat_id=chat_id
         )
     elif message.video:
         fileid = message.video["file_id"]
-        response = f"https://api.telegram.org/bot{MORTAL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{MORTAL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the bytes, then pass the bytes into the argument instead! :)
-        logger.info(f"{filepath} // {htmllink}")
+        response2, filepath = grabResponse(fileid, token)
         bot.send_video(
             video=response2.content,
             caption=message.caption,
@@ -249,185 +275,33 @@ def sendNonTextMessageMortal(message, bot, chat_id):
         )
     elif message.video_note:
         fileid = message.video_note["file_id"]
-        response = f"https://api.telegram.org/bot{MORTAL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{MORTAL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the bytes, then pass the bytes into the argument instead! :)
-        logger.info(f"{filepath} // {htmllink}")
+        response2, filepath = grabResponse(fileid, token)
         bot.send_video_note(
             video_note=response2.content,
             chat_id=chat_id
         )
     elif message.voice:
         fileid = message.voice["file_id"]
-        response = f"https://api.telegram.org/bot{MORTAL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{MORTAL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the string, then pass the bytes into the argument instead! :)
+        response2, filepath = grabResponse(fileid, token)
         bot.send_voice(
             voice=response2.content,
             chat_id=chat_id
         )
     elif message.audio:
         fileid = message.audio["file_id"]
-        response = f"https://api.telegram.org/bot{MORTAL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{MORTAL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the string, then pass the bytes into the argument instead! :)
+        response2, filepath = grabResponse(fileid, token)
         bot.send_audio(
             audio=response2.content,
             chat_id=chat_id
         )
     elif message.animation:
         fileid = message.animation["file_id"]
-        response = f"https://api.telegram.org/bot{MORTAL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{MORTAL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the string, then pass the bytes into the argument instead! :)
+        response2, filepath = grabResponse(fileid, token)
         bot.send_animation(
             animation=response2.content,
             chat_id=chat_id
         )
 
-def sendNonTextMessageAngel(message, bot, chat_id):
-    if message.photo:
-        fileid = message.photo[-1]["file_id"]
-        response = f"https://api.telegram.org/bot{ANGEL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{ANGEL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the bytes, then pass the bytes into the argument instead! :)
-        logger.info(f"{filepath} // {htmllink}")
-        bot.send_photo(
-            photo=response2.content,
-            caption=message.caption,
-            chat_id=chat_id
-        )
-    elif message.sticker:
-        bot.send_sticker(
-            sticker=message.sticker,
-            chat_id=chat_id
-        )
-    elif message.document:
-        fileid = message.document["file_id"]
-        response = f"https://api.telegram.org/bot{ANGEL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{ANGEL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.text to get the string, then pass the bytes into the argument instead! :)
-        response2.encoding = 'utf-8' ##explicit encoding by setting .encoding before accessing .text
-        bot.send_document(
-            document=response2.content,
-            filename=f"{filepath.split('/')[-1]}", ##sending in bytes loses the file name & file type. Not perfect, but this is probably the best solution.
-            caption=message.caption,
-            chat_id=chat_id
-        )
-    elif message.video:
-        fileid = message.video["file_id"]
-        response = f"https://api.telegram.org/bot{ANGEL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{ANGEL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the bytes, then pass the bytes into the argument instead! :)
-        logger.info(f"{filepath} // {htmllink}")
-        bot.send_video(
-            video=response2.content,
-            caption=message.caption,
-            chat_id=chat_id
-        )
-    elif message.video_note:
-        fileid = message.video_note["file_id"]
-        response = f"https://api.telegram.org/bot{ANGEL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{ANGEL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the bytes, then pass the bytes into the argument instead! :)
-        logger.info(f"{filepath} // {htmllink}")
-        bot.send_video_note(
-            video_note=response2.content,
-            chat_id=chat_id
-        )
-    elif message.voice:
-        fileid = message.voice["file_id"]
-        response = f"https://api.telegram.org/bot{ANGEL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{ANGEL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the string, then pass the bytes into the argument instead! :)
-        bot.send_voice(
-            voice=response2.content,
-            chat_id=chat_id
-        )
-    elif message.audio:
-        fileid = message.audio["file_id"]
-        response = f"https://api.telegram.org/bot{ANGEL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{ANGEL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the string, then pass the bytes into the argument instead! :)
-        bot.send_audio(
-            audio=response2.content,
-            chat_id=chat_id
-        )
-    elif message.animation:
-        fileid = message.animation["file_id"]
-        response = f"https://api.telegram.org/bot{ANGEL_BOT_TOKEN}/getFile?file_id={fileid}"
-        logger.info(f"{fileid} // {response}")
-        j = Response()
-        j = dload.json(response)
-        logger.info(dload.json(response))
-        filepath = j["result"]["file_path"]
-        htmllink = f"https://api.telegram.org/file/bot{ANGEL_BOT_TOKEN}/{filepath}"
-        response2 = requests.get(htmllink)  ##Somehow, passing the html link into photo does NOT work.
-        # Use response2.content to get the string, then pass the bytes into the argument instead! :)
-        bot.send_animation(
-            animation=response2.content,
-            chat_id=chat_id
-        )
     '''
     Fowarding polls probably doesn't work for now, ignore the code below
     '''
@@ -465,16 +339,11 @@ def sendNonTextMessageAngel(message, bot, chat_id):
     #                   )
 
 
+angelbot = telegram.Bot(ANGEL_BOT_TOKEN)
+mortalbot = telegram.Bot(MORTAL_BOT_TOKEN)
 
 
-
-
-
-
-angelbotID = telegram.Bot(ANGEL_BOT_TOKEN)
-mortalbotID = telegram.Bot(MORTAL_BOT_TOKEN)
-
-def sendAngel(update: Update, context: CallbackContext, bot = mortalbotID):
+def sendAngel(update: Update, context: CallbackContext, bot=mortalbot):
     playerName = update.message.chat.username.lower()
     # logger.info(f'{context.bot}')
     if update.message.text:
@@ -487,16 +356,17 @@ def sendAngel(update: Update, context: CallbackContext, bot = mortalbotID):
             update.message.reply_text(messagesdualbot.STOPPED_BOT(configdualbot.ANGEL_ALIAS))
             return CHOOSING
     else:
-        sendNonTextMessageAngel(update.message, bot, players[playerName].angel.chat_id)
+        sendNonTextMessage(update.message, bot, players[playerName].angel.chat_id, ANGEL_BOT_TOKEN)
 
     update.message.reply_text(messagesdualbot.MESSAGE_SENT)
 
-    logger.info(messagesdualbot.getSentMessageLog(configdualbot.ANGEL_ALIAS, playerName, players[playerName].angel.username))
+    logger.info(
+        messagesdualbot.getSentMessageLog(configdualbot.ANGEL_ALIAS, playerName, players[playerName].angel.username))
 
     return ANGEL
 
 
-def sendMortal(update: Update, context: CallbackContext, bot = angelbotID):
+def sendMortal(update: Update, context: CallbackContext, bot=angelbot):
     playerName = update.message.chat.username.lower()
     # logger.info(f'{context.bot}') ##to find out the current telegram.Bot Object being used
     if update.message.text:
@@ -509,11 +379,12 @@ def sendMortal(update: Update, context: CallbackContext, bot = angelbotID):
             update.message.reply_text(messagesdualbot.STOPPED_BOT(configdualbot.MORTAL_ALIAS))
             return CHOOSING
     else:
-        sendNonTextMessageMortal(update.message, bot, players[playerName].mortal.chat_id)
+        sendNonTextMessage(update.message, bot, players[playerName].mortal.chat_id, MORTAL_BOT_TOKEN)
 
     update.message.reply_text(messagesdualbot.MESSAGE_SENT)
 
-    logger.info(messagesdualbot.getSentMessageLog(configdualbot.MORTAL_ALIAS, playerName, players[playerName].mortal.username))
+    logger.info(
+        messagesdualbot.getSentMessageLog(configdualbot.MORTAL_ALIAS, playerName, players[playerName].mortal.username))
 
     return MORTAL
 
@@ -550,15 +421,15 @@ def main():
     conv_handler_Angel = ConversationHandler(
         entry_points=[
             CommandHandler('start', start_Angelbot),
-            MessageHandler(~Filters.command, start_Angelbot), ##putting ~Filters.all will cause an error
+            MessageHandler(~Filters.command, start_Angelbot),  ##putting ~Filters.all will cause an error
         ],
         states={
             CHOOSING:
                 [
-                CallbackQueryHandler(startAngel, pattern='messageangel'),
-                CallbackQueryHandler(whoismyAngel, pattern='whoismyangel'),
-                CallbackQueryHandler(angelInterests, pattern='angelinterests'),
-                CallbackQueryHandler(angelTwotruthsonelie, pattern='angeltwotruthsonelie')
+                    CallbackQueryHandler(startAngel, pattern='messageangel'),
+                    CallbackQueryHandler(whoismyAngel, pattern='whoismyangel'),
+                    CallbackQueryHandler(angelInterests, pattern='angelinterests'),
+                    CallbackQueryHandler(angelTwotruthsonelie, pattern='angeltwotruthsonelie')
                 ],
             ANGEL: [MessageHandler(~Filters.command, sendAngel)]
         },
@@ -568,16 +439,16 @@ def main():
     conv_handler_Mortal = ConversationHandler(
         entry_points=[
             CommandHandler('start', start_Mortalbot),
-            MessageHandler(~Filters.command, start_Mortalbot), ##putting ~Filters.all will cause an error
+            MessageHandler(~Filters.command, start_Mortalbot),  ##putting ~Filters.all will cause an error
         ],
         states={
             CHOOSING:
                 [
-                CallbackQueryHandler(startMortal, pattern='messagemortal'),
-                CallbackQueryHandler(whoismyMortal, pattern='whoismymortal'),
-                CallbackQueryHandler(mortalInterests, pattern='mortalinterests'),
-                CallbackQueryHandler(mortalTwotruthsonelie, pattern='mortaltwotruthsonelie'),
-                CallbackQueryHandler(mortalIntroduction, pattern='mortalintroduction')
+                    CallbackQueryHandler(startMortal, pattern='messagemortal'),
+                    CallbackQueryHandler(whoismyMortal, pattern='whoismymortal'),
+                    CallbackQueryHandler(mortalInterests, pattern='mortalinterests'),
+                    CallbackQueryHandler(mortalTwotruthsonelie, pattern='mortaltwotruthsonelie'),
+                    CallbackQueryHandler(mortalIntroduction, pattern='mortalintroduction')
                 ],
             MORTAL: [MessageHandler(~Filters.command, sendMortal)]
         },

@@ -33,15 +33,16 @@ def loadPlayers(players: dict):
                 line_count += 1
             else:
                 playerName = row[0].strip().lower() ##Note: Player is in 1st column. Angel is in 2nd column, Mortal is in 3rd column.
-                # angelName = row[1].strip().lower()
-                # mortalName = row[2].strip().lower()
+                angelName = row[1].strip().lower()
+                mortalName = row[2].strip().lower()
                 genderPlayer = row[3].strip().lower()
                 interests = row[4].strip().lower()
                 twotruthsonelie = row[5].strip().lower()
                 introduction = row[6].strip().lower()
+
                 players[playerName].username = playerName
-                # players[playerName].angel = players[angelName]            ###NOTE: DO NOT USE these two lines of code as they DO NOT WORK. When it processes the first row,
-                # players[playerName].mortal = players[mortalName]          ###the usernames & details of the Angel & Mortal have not been initialised yet.
+                players[playerName].angel = angelName            ###NOTE: DO NOT USE these two lines of code as they DO NOT WORK. When it processes the first row,
+                players[playerName].mortal = mortalName          ###the usernames & details of the Angel & Mortal have not been initialised yet.
                 players[playerName].gender = genderPlayer
                 players[playerName].interests = interests
                 players[playerName].twotruthsonelie = twotruthsonelie
@@ -49,25 +50,15 @@ def loadPlayers(players: dict):
                 line_count += 1
         logger.info(f'Basic information processed for {line_count} lines.')
     '''
-    With the basic information processed, we can now match the Player objects together through Angel-Mortal pairings
+    With the basic information processed, we can now match the Player objects together 
+    through Angel-Mortal pairings
     '''
-    with open(config.PLAYERS_FILENAME) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        line_count = 0
-        for row in csv_reader:
-            if line_count == 0:
-                line_count += 1
-            else:
-                playerName = row[0].strip().lower() ##Note: Player is in 1st column. Angel is in 2nd column, Mortal is in 3rd column.
-                angelName = row[1].strip().lower()
-                mortalName = row[2].strip().lower()
-                players[playerName].angel = players[angelName]
-                players[playerName].mortal = players[mortalName]
-                print(f'\t{playerName} has angel {angelName} and mortal {mortalName}.')
-                logger.info(f'\t{playerName} has angel {angelName} and mortal {mortalName}.')
-                line_count += 1
-        logger.info(f'Angel-Mortal pairings processed for {line_count} lines.')
-    validatePairings(players)
+    temp = players
+    for k, v in players.items():
+        temp[k].angel = players[v.angel]
+        temp[k].mortal = players[v.mortal]
+    players = temp
+
     loadChatID(players)
 
 
