@@ -4,6 +4,7 @@ import player
 import messagesdualbot
 import datetime
 import collections
+import PostgreSQLconnect
 
 import configdualbot
 import telegram
@@ -45,7 +46,8 @@ MORTAL_BOT_TOKEN = configdualbot.MORTAL_BOT_TOKEN
 herokuappname = configdualbot.herokuappname
 
 players = collections.defaultdict(player.Player)
-player.loadPlayers(players)  ##loads back the Telegram chat ids after bot is shut down once
+PostgreSQLconnect.loadPlayers_fromSQL(players)
+PostgreSQLconnect.loadChatID_fromSQL(players) ##loads back the Telegram chat ids after bot is shut down once
 
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -59,7 +61,6 @@ def start_Angelbot(update: Update, context: CallbackContext) -> None:
         return
 
     players[playerName].chat_id = update.message.chat.id
-    player.saveChatID(players)
 
     if players[playerName].chat_id is None:  ##just in case
         update.message.reply_text(messagesdualbot.ERROR_CHAT_ID)
@@ -89,7 +90,6 @@ def start_Mortalbot(update: Update, context: CallbackContext) -> None:
         return  ##returns whatever state it previously was at
 
     players[playerName].chat_id = update.message.chat.id
-    player.saveChatID(players)
 
     if players[playerName].chat_id is None:  ##just in case
         update.message.reply_text(messagesdualbot.ERROR_CHAT_ID)
@@ -120,11 +120,12 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 def reload_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /savechatids is issued."""
-    player.saveChatID(players)
+    # player.saveChatID(players)
     logger.info(f'Player chat ids have been saved in {configdualbot.CHAT_ID_JSON}')
-    player.loadPlayers(players)
-    logger.info(f'Players reloaded')
-    update.message.reply_text(f'Players reloaded')
+    PostgreSQLconnect.saveplayerschatids_toSQL(players)
+    # player.loadChatID(players)
+    # logger.info(f'Players reloaded')
+    # update.message.reply_text(f'Players reloaded')
 
 
 '''
@@ -463,21 +464,21 @@ def main():
     dispatcherAngel.add_handler(conv_handler_Angel)
 
     # Start the Bot
-    # updaterMortal.start_polling()
-    # updaterAngel.start_polling()
+    updaterMortal.start_polling()
+    updaterAngel.start_polling()
     '''
     The next paragraph of codes replace "updater.start_polling()" 
     to enable listening to webhooks on heroku. See https://towardsdatascience.com/how-to-deploy-a-telegram-bot-using-heroku-for-free-9436f89575d2 for information.
     '''
-    updaterMortal.start_webhook(listen="0.0.0.0",
-                          port=PORT,
-                          url_path=MORTAL_BOT_TOKEN,
-                          webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
+    # updaterMortal.start_webhook(listen="0.0.0.0",
+    #                       port=PORT,
+    #                       url_path=MORTAL_BOT_TOKEN,
+    #                       webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
 
-    updaterAngel.start_webhook(listen="0.0.0.0",
-                          port=PORT,
-                          url_path=ANGEL_BOT_TOKEN,
-                          webhook_url=f'https://{herokuappname}.herokuapp.com/{ANGEL_BOT_TOKEN}')
+    # updaterAngel.start_webhook(listen="0.0.0.0",
+    #                       port=PORT,
+    #                       url_path=ANGEL_BOT_TOKEN,
+    #                       webhook_url=f'https://{herokuappname}.herokuapp.com/{ANGEL_BOT_TOKEN}')
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
@@ -490,5 +491,6 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        player.saveChatID(players)
-        logger.info(f'Player chat ids have been saved in {configdualbot.CHAT_ID_JSON}')
+        print("done")
+        # player.saveChatID(players)
+        # logger.info(f'Player chat ids have been saved in {configdualbot.CHAT_ID_JSON}')

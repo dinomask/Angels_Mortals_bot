@@ -58,7 +58,7 @@ def loadPlayers(players: dict):
         temp[k].angel = players[v.angel]
         temp[k].mortal = players[v.mortal]
     players = temp
-
+    validatePairings(players)
     loadChatID(players)
 
 
@@ -82,9 +82,10 @@ def validatePairings(players: dict):
 #         json.dump(temp, f)
 
 def saveChatID(players: dict):
-    temp = {}
+    temp = []
     for k, v in players.items():
-        temp[k] = v.chat_id
+        d = {"playerusername": k, "chat_id": players[k].chat_id}
+        temp.append(d)
 
     with open(config.CHAT_ID_JSON, 'w+') as f:
         json.dump(temp, f)
@@ -94,8 +95,11 @@ def loadChatID(players: dict):
         with open(config.CHAT_ID_JSON, 'r') as f:
             temp = json.load(f)
             logger.info(temp)
-            for k, v in temp.items():
-                players[k].chat_id = v
+            for player in temp:
+                playerName = player["playerusername"]
+                chatid = player["chat_id"]
+                players[playerName].chat_id = chatid
+                print (f"player {playerName} with chat_id {players[playerName].chat_id} has been loaded from local CHAT_ID_JSON")
 
     except:
         logger.warn('Fail to load chat ids')

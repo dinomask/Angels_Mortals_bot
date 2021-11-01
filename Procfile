@@ -1,1 +1,1 @@
-web: python3 dualbot.py
+web: python3 dualbotPostgreSQL.py
