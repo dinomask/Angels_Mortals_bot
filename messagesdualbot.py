@@ -12,6 +12,8 @@ HELP_TEXT_ANGEL = (
 HELP_TEXT_MORTAL = (
     f'This bot supports forwarding text, emojis, photos, stickers, documents, audio, videos, and animations.'
     f'\n\n'
+    f"Type /start if your messages aren't getting sent"
+    f'\n\n'
     f'Please click the buttons below to find out more about your {configdualbot.MORTAL_ALIAS}\n\n'
     f'After that, you may click the button below to start messaging your {configdualbot.MORTAL_ALIAS} anonymously!'
 )
