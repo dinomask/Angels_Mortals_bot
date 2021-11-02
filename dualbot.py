@@ -8,7 +8,7 @@ import collections
 import configdualbot
 import telegram
 from telegram import ParseMode
-import dload  ##important for parsing JSON htmls; to enable bot forwarding of images between bots
+import dload  ##important for parsing JSON htmls; to enable bot forwarding of images between botss
 import requests
 
 

@@ -1,5 +1,5 @@
 import configdualbot
-
+s
 MESSAGE_SENT = 'Message sent!'
 HELP_TEXT_ANGEL = (
     f'This bot supports forwarding text, emojis, photos, stickers, documents, audio, videos, and animations.'
