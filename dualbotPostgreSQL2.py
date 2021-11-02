@@ -13,8 +13,7 @@ import dload  ##important for parsing JSON htmls; to enable bot forwarding of im
 import requests
 
 import os ##for heroku setup
-PORT_ANGEL = int(os.environ.get('PORT', '8443')) ##for heroku setup. See https://github.com/python-telegram-bot/python-telegram-bot/wiki/Webhooks#heroku
-PORT_MORTAL = int(os.environ.get('PORT', '443')) ##This line says, get the value of PORT from the environment if it is set, otherwise use 443
+PORT = int(os.environ.get('PORT', '8443')) ##for heroku setup. See https://github.com/python-telegram-bot/python-telegram-bot/wiki/Webhooks#heroku ##This line says, get the value of PORT from the environment if it is set, otherwise use 8443
 
 class Response():  ##Class for Telegram files
     def __init__(self):
@@ -420,16 +419,16 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updaterMortal = Updater(MORTAL_BOT_TOKEN, use_context=True)
+    # updaterMortal = Updater(MORTAL_BOT_TOKEN, use_context=True)
     updaterAngel = Updater(ANGEL_BOT_TOKEN, use_context=True)
     # Get the dispatcher to register handlers
-    dispatcherMortal = updaterMortal.dispatcher
+    # dispatcherMortal = updaterMortal.dispatcher
     dispatcherAngel = updaterAngel.dispatcher
     # on different commands - answer in Telegram
     # dispatcherMortal.add_handler(CommandHandler("start", start_Mortal))
-    dispatcherMortal.add_handler(CommandHandler("help", help_command_MORTAL))
-    dispatcherMortal.add_handler(CommandHandler("reloadchatids", reload_command))
-    dispatcherMortal.add_handler(CommandHandler("savechatids", savechatids_command))
+    # dispatcherMortal.add_handler(CommandHandler("help", help_command_MORTAL))
+    # dispatcherMortal.add_handler(CommandHandler("reloadchatids", reload_command))
+    # dispatcherMortal.add_handler(CommandHandler("savechatids", savechatids_command))
     # dispatcherMortal.add_handler(CommandHandler("mortal", mortal_command))
 
     # dispatcherAngel.add_handler(CommandHandler("start", start_Angel))
@@ -474,7 +473,7 @@ def main():
         fallbacks=[CommandHandler('cancel', cancel)],
     )
 
-    dispatcherMortal.add_handler(conv_handler_Mortal)
+    # dispatcherMortal.add_handler(conv_handler_Mortal)
     dispatcherAngel.add_handler(conv_handler_Angel)
 
     # Start the Bot
@@ -484,20 +483,20 @@ def main():
     The next paragraph of codes replace "updater.start_polling()" 
     to enable listening to webhooks on heroku. See https://towardsdatascience.com/how-to-deploy-a-telegram-bot-using-heroku-for-free-9436f89575d2 for information.
     '''
-    updaterMortal.start_webhook(listen="0.0.0.0",
-                          port=PORT_MORTAL,
-                          url_path=MORTAL_BOT_TOKEN,
-                          webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
+    # updaterMortal.start_webhook(listen="0.0.0.0",
+    #                       port=PORT,
+    #                       url_path=MORTAL_BOT_TOKEN,
+    #                       webhook_url=f'https://{herokuappname}.herokuapp.com/')
 
     updaterAngel.start_webhook(listen="0.0.0.0",
-                          port=PORT_ANGEL,
+                          port=PORT,
                           url_path=ANGEL_BOT_TOKEN,
-                          webhook_url=f'https://{herokuappname}.herokuapp.com/{ANGEL_BOT_TOKEN}')
+                          webhook_url=f'https://{herokuappname}.herokuapp.com/')
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
-    updaterMortal.idle()
+    # updaterMortal.idle()
     updaterAngel.idle()
 
 
