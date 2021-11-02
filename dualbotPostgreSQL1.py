@@ -13,8 +13,8 @@ import dload  ##important for parsing JSON htmls; to enable bot forwarding of im
 import requests
 
 import os ##for heroku setup
-PORT_ANGEL = int(os.environ.get('PORT', '8443')) ##for heroku setup. See https://github.com/python-telegram-bot/python-telegram-bot/wiki/Webhooks#heroku
-PORT_MORTAL = int(os.environ.get('PORT', '443')) ##This line says, get the value of PORT from the environment if it is set, otherwise use 443
+PORT = int(os.environ.get('PORT', '8443')) ##for heroku setup. See https://github.com/python-telegram-bot/python-telegram-bot/wiki/Webhooks#heroku
+
 
 class Response():  ##Class for Telegram files
     def __init__(self):
