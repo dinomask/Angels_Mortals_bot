@@ -5,6 +5,7 @@ charset-normalizer==2.0.7
 dload==0.6
 idna==3.3
 pip==21.1.2
+psycopg2==2.9.1
 python-telegram-bot==13.7
 pytz==2021.3
 requests==2.26.0
@@ -15,4 +16,3 @@ tzdata==2021.2.post0
 tzlocal==3.0
 urllib3==1.26.7
 wheel==0.36.2
-psycopg2==2.9.1
