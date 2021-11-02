@@ -416,7 +416,7 @@ def main():
     dispatcherAngel = updaterAngel.dispatcher
     # on different commands - answer in Telegram
     # dispatcherMortal.add_handler(CommandHandler("start", start_Mortal))
-    dispatcherMortal.add_handler(CommandHandler("help", help_command_MORTAL)
+    dispatcherMortal.add_handler(CommandHandler("help", help_command_MORTAL))
     dispatcherMortal.add_handler(CommandHandler("savechatids", reload_command))
     # dispatcherMortal.add_handler(CommandHandler("mortal", mortal_command))
 
