@@ -486,12 +486,12 @@ def main():
     # updaterMortal.start_webhook(listen="0.0.0.0",
     #                       port=PORT,
     #                       url_path=MORTAL_BOT_TOKEN,
-    #                       webhook_url=f'https://{herokuappname}.herokuapp.com/')
+    #                       webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
 
     updaterAngel.start_webhook(listen="0.0.0.0",
                           port=PORT,
                           url_path=ANGEL_BOT_TOKEN,
-                          webhook_url=f'https://{herokuappname}.herokuapp.com/')
+                          webhook_url=f'https://{herokuappname}.herokuapp.com/{ANGEL_BOT_TOKEN}')
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
