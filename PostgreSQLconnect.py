@@ -108,6 +108,7 @@ def create_sql_players():
         )
         """,
         """
+        DROP TYPE IF EXISTS stringint;
         CREATE TYPE stringint AS (playerusername text, chat_id int);
         """,
         )
@@ -146,7 +147,7 @@ def import_players_from_csv():
         cur.close()
         # commit the changes
         conn.commit()
-        print (f"playerlist.csv imported successfully into SQL database")
+        print (f"PLAYERS_FILENAME imported successfully into SQL database")
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
@@ -154,7 +155,7 @@ def import_players_from_csv():
             conn.close()
 
 
-def loadPlayers_fromSQL(players: dict):
+def loadPlayers_fromSQL(players: dict): ##NOTE: this also loads the chat ids from playerchatids SQL
     commands = (
         f"""
             SELECT * FROM
@@ -195,6 +196,7 @@ def loadPlayers_fromSQL(players: dict):
         for k, v in players.items():
             temp[k].angel = players[v.angel]
             temp[k].mortal = players[v.mortal]
+        print(f"players loaded into Telegram dualbot!")
         players = temp
         player.validatePairings(players)
         loadChatID_fromSQL(players)
@@ -228,6 +230,7 @@ def loadChatID_fromSQL(players: dict):
             players[playerName].chat_id = chatid
         # close communication with the PostgreSQL database server
         cur.close()
+        print(f"player chat_ids loaded to dualbot!")
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
@@ -322,7 +325,7 @@ def saveplayerchatids_fromSQL_toJSON(): ##JUST IN CASE FUNCTION
         playerchatids_selected = cur.fetchall()
         print (f"{playerchatids_selected}")
 
-        with open('test.JSON', 'w+') as f:
+        with open(configdualbot.CHAT_ID_JSON, 'w+') as f:
             json.dump(playerchatids_selected, f)
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -330,7 +333,7 @@ def saveplayerchatids_fromSQL_toJSON(): ##JUST IN CASE FUNCTION
         if conn is not None:
             conn.close()
 
-def loadplayerchatids_fromJSON_toSQL(): ##JUST IN CASE FUNCTION
+def import_playerchatids_fromJSON_toSQL(): ##JUST IN CASE FUNCTION
     try:
         conn = psycopg2.connect(host=configdualbot.dbhost, port=5432, database=configdualbot.dbname,
                                 user=configdualbot.dbuser, password=configdualbot.dbpassword)
@@ -376,10 +379,14 @@ if __name__ == '__main__':
     # testconnect()
     create_sql_players()
     import_players_from_csv()
+    import_playerchatids_fromJSON_toSQL()
     # loadPlayers_fromSQL(players)
+    # print(f"players loaded to dualbot!")
     # loadChatID_fromSQL(players)
-    # print(players) ##see if load functions are working
-    # saveplayerchatids_fromSQL_toJSON(players)
+    # print(f"player chat_ids loaded to dualbot!")
+    # print(players & chat_id loaded!) ##see if load functions are working
+    # saveplayerschatids_toSQL(players)
+    # saveplayerchatids_fromSQL_toJSON()
 
 
 
