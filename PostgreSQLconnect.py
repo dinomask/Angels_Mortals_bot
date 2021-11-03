@@ -275,24 +275,29 @@ def saveplayerschatids_toSQL(players: dict): ##USE THIS INSTEAD OF ABOVE FUNCTIO
             data.append(d)
         command1 = (
             f"""
+            DROP TABLE IF EXISTS
+            playerchatids;
+            """,
+            f"""
             CREATE TABLE IF NOT EXISTS playerchatids(
                     playerusername VARCHAR(255) PRIMARY KEY,
-                    chat_id INTEGER NOT NULL,
+                    chat_id INTEGER NULL,
                     FOREIGN KEY (playerusername)
                     REFERENCES playerlist (Player)
                     ON UPDATE CASCADE ON DELETE CASCADE
             )
             """
         )
-        cur.execute(command1)
+        for commands in command1:
+            cur.execute(commands)
         print("Command 1 success!")
         command2 = (
             f"""
             INSERT INTO playerchatids
-            SELECT * FROM json_populate_recordset(null::stringint, '{json.dumps(data)}')
-            ON CONFLICT DO NOTHING
+            SELECT * FROM jsonb_populate_recordset(null::stringint, '{json.dumps(data)}') AS p
             """
         )
+        print (json.dumps(data))
         cur.execute(command2)
         # close communication with the PostgreSQL database server
         cur.close()
@@ -343,9 +348,13 @@ def import_playerchatids_fromJSON_toSQL(): ##JUST IN CASE FUNCTION
             data = json.load(f)
         command1 = (
             f"""
+            DROP TABLE IF EXISTS
+            playerchatids;
+            """,
+            f"""
             CREATE TABLE IF NOT EXISTS playerchatids(
                     playerusername VARCHAR(255) PRIMARY KEY,
-                    chat_id INTEGER NOT NULL,
+                    chat_id INTEGER NULL,
                     FOREIGN KEY (playerusername)
                     REFERENCES playerlist (Player)
                     ON UPDATE CASCADE ON DELETE CASCADE
@@ -356,10 +365,10 @@ def import_playerchatids_fromJSON_toSQL(): ##JUST IN CASE FUNCTION
             f"""
             INSERT INTO playerchatids
             SELECT * FROM json_populate_recordset(null::stringint, '{json.dumps(data)}')
-            ON CONFLICT DO NOTHING
             """
         )
-        cur.execute(command1)
+        for commands in command1:
+            cur.execute(commands)
         print("Command 1 success!")
         cur.execute(command2)
         print("CHAT_ID_JSON Dump onto SQL success!")

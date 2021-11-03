@@ -120,7 +120,7 @@ def help_command_MORTAL(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /help is issued."""
     update.message.reply_text(messagesdualbot.HELP_TEXT_MORTAL)
 
-
+@player.restricted
 def reload_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /reloadchatids is issued."""
     PostgreSQLconnect.import_players_from_csv()
@@ -131,19 +131,21 @@ def reload_command(update: Update, context: CallbackContext) -> None:
     logger.info(f'Player data & chat ids have been loaded into Telegram dualbot!')
     update.message.reply_text(f'Players reloaded!')
 
+@player.restricted
 def savechatids_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /savechatids is issued."""
     PostgreSQLconnect.saveplayerschatids_toSQL(players)
     logger.info(f'Player chat ids have been saved in playerchatids SQL')
     update.message.reply_text(f'Player chat ids are saved in playerchatids SQL!')
 
+@player.restricted
 def savechatids_toJSON_command(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /savechatids is issued."""
+    """Send a message when the command /downloadchatids is issued."""
     PostgreSQLconnect.saveplayerschatids_toSQL(players)
     logger.info(f'Player chat ids have been saved in playerchatids SQL')
     PostgreSQLconnect.saveplayerchatids_fromSQL_toJSON()
-    logger.info(f'Player chat ids are saved in local JSON!')
-    update.message.reply_text(f'Player chat ids are saved in local JSON!')
+    logger.info(f'Player chat ids are downloaded into local JSON!')
+    update.message.reply_text(f'Player chat ids are downloaded into local JSON!')
 
 
 
@@ -437,14 +439,14 @@ def main():
     dispatcherMortal.add_handler(CommandHandler("help", help_command_MORTAL))
     dispatcherMortal.add_handler(CommandHandler("reloadchatids", reload_command))
     dispatcherMortal.add_handler(CommandHandler("savechatids", savechatids_command))
-    dispatcherMortal.add_handler(CommandHandler("savechatidstojson", savechatids_toJSON_command))
+    dispatcherMortal.add_handler(CommandHandler("downloadchatids", savechatids_toJSON_command))
     # dispatcherMortal.add_handler(CommandHandler("mortal", mortal_command))
 
     # dispatcherAngel.add_handler(CommandHandler("start", start_Angel))
     # dispatcherAngel.add_handler(CommandHandler("help", help_command_ANGEL))
     # dispatcherAngel.add_handler(CommandHandler("reloadchatids", reload_command))
     # dispatcherAngel.add_handler(CommandHandler("savechatids", savechatids_command))
-    # dispatcherAngel.add_handler(CommandHandler("savechatidstojson", savechatids_toJSON_command))
+    # dispatcherAngel.add_handler(CommandHandler("downloadchatids", savechatids_toJSON_command))
 
     conv_handler_Angel = ConversationHandler(
         entry_points=[
@@ -487,16 +489,16 @@ def main():
     # dispatcherAngel.add_handler(conv_handler_Angel)
 
     # Start the Bot
-    # updaterMortal.start_polling()
+    updaterMortal.start_polling()
     # updaterAngel.start_polling()
     '''
     The next paragraph of codes replace "updater.start_polling()" 
     to enable listening to webhooks on heroku. See https://towardsdatascience.com/how-to-deploy-a-telegram-bot-using-heroku-for-free-9436f89575d2 for information.
     '''
-    updaterMortal.start_webhook(listen="0.0.0.0",
-                          port=PORT,
-                          url_path=MORTAL_BOT_TOKEN,
-                          webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
+    # updaterMortal.start_webhook(listen="0.0.0.0",
+    #                       port=PORT,
+    #                       url_path=MORTAL_BOT_TOKEN,
+    #                       webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
 
     # updaterAngel.start_webhook(listen="0.0.0.0",
     #                       port=PORT,

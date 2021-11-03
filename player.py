@@ -2,19 +2,22 @@ import config
 import csv
 import json
 import logging
+from functools import wraps
+
+import configdualbot
 
 logger = logging.getLogger(__name__)
 
 def restricted(func):
     """Restrict usage of func to allowed users only and replies if necessary"""
     @wraps(func)
-    def wrapped(bot, update, *args, **kwargs):
+    def wrapped(update, context, *args, **kwargs):
         user_id = update.message.chat.id
-        if user_id not in configdualbot['restricted_ids']:
-            print("WARNING: Unauthorized access denied for {}.".format(user_id))
+        if user_id != int(configdualbot.gamemasterchatid):
+            print(f"WARNING: Unauthorized access denied for {user_id}.")
             update.message.reply_text('User disallowed.')
             return  # quit function
-        return func(bot, update, *args, **kwargs)
+        return func(update, context, *args, **kwargs)
     return wrapped
 
 
