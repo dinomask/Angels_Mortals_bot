@@ -11,5 +11,6 @@ dbhost = os.environ['dbhost']
 dbname = os.environ['dbname']  ##for connecting to PostgreSQL database on heroku
 dbuser = os.environ['dbuser']
 dbpassword = os.environ['dbpassword']
+gamemasterchatid = os.environ['gamemasterchatid']
 # ANGEL_BOT_ID = os.environ['ANGEL_BOT_ID'] ##not used atm, was for send_polls
 # MORTAL_BOT_ID = os.environ['MORTAL_BOT_ID'] ##not used atm, was for send_polls
