@@ -141,7 +141,10 @@ def import_players_from_csv():
             next(reader)  # Skip the header row.
             for row in reader:
                 cur.execute(
-                    f"INSERT INTO playerlist VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}')"
+                    f"""
+                    INSERT INTO playerlist VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}')
+                    ON CONFLICT DO NOTHING
+                    """
                 )
         # close communication with the PostgreSQL database server
         cur.close()
@@ -297,7 +300,6 @@ def saveplayerschatids_toSQL(players: dict): ##USE THIS INSTEAD OF ABOVE FUNCTIO
             SELECT * FROM jsonb_populate_recordset(null::stringint, '{json.dumps(data)}') AS p
             """
         )
-        print (json.dumps(data))
         cur.execute(command2)
         # close communication with the PostgreSQL database server
         cur.close()
@@ -328,7 +330,6 @@ def saveplayerchatids_fromSQL_toJSON(): ##JUST IN CASE FUNCTION
         # close communication with the PostgreSQL database server
         print("Selecting rows from playerchatids table using cursor.fetchall")
         playerchatids_selected = cur.fetchall()
-        print (f"{playerchatids_selected}")
 
         with open(configdualbot.CHAT_ID_JSON, 'w+') as f:
             json.dump(playerchatids_selected, f)
@@ -388,12 +389,11 @@ if __name__ == '__main__':
     # testconnect()
     create_sql_players()
     import_players_from_csv()
-    import_playerchatids_fromJSON_toSQL()
+    # import_playerchatids_fromJSON_toSQL()
     # loadPlayers_fromSQL(players)
-    # print(f"players loaded to dualbot!")
+    ## print(f"players loaded to dualbot!")
     # loadChatID_fromSQL(players)
-    # print(f"player chat_ids loaded to dualbot!")
-    # print(players & chat_id loaded!) ##see if load functions are working
+    ## print(f"player chat_ids loaded to dualbot!")
     # saveplayerschatids_toSQL(players)
     # saveplayerchatids_fromSQL_toJSON()
 
