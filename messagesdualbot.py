@@ -1,6 +1,7 @@
 import configdualbot
 
 MESSAGE_SENT = 'Message sent!'
+MESSAGE_SENT_TO_GAMEMASTER = 'Message sent to the Game Master! You may now click other buttons in the main menu.'
 HELP_TEXT_ANGEL = (
     f'This bot supports forwarding text, emojis, photos, stickers, documents, audio, videos, and animations.'
     f'\n\n'
@@ -31,6 +32,12 @@ def getPlayerMessage(alias):
     return f'From now on, all your messages will be sent to your {alias}. Have fun chatting!\n\n' \
            f'Type /cancel if you want to go back and find out more about your {alias}\n\n'
            # f"Type /start again if your messages somehow aren't getting sent"
+
+def getSupportMessage():
+    return f"Facing an issue? Got a suggestion?\n\n"\
+           f'Please type a description of your problem or feedback to be sent to the Game Master.\n\n' \
+           f"Type /cancel to go back to the main menu."
+
 
 '''
 not used in dualbot

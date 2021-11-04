@@ -30,7 +30,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKe
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, ConversationHandler, \
     CallbackQueryHandler
 
-CHOOSING, ANGEL, MORTAL = range(3)
+GAMEMASTERSUPPORT, CHOOSING, ANGEL, MORTAL = range(4)
 
 # Enable logging
 logging.basicConfig(
@@ -71,8 +71,8 @@ def start_Angelbot(update: Update, context: CallbackContext) -> None:
         [InlineKeyboardButton(f"Talk to my {configdualbot.ANGEL_ALIAS}", callback_data='messageangel')],
         [InlineKeyboardButton(f"Who is my {configdualbot.ANGEL_ALIAS}?", callback_data='whoismyangel'),
          InlineKeyboardButton(f"My {configdualbot.ANGEL_ALIAS}'s interests", callback_data='angelinterests')],
-        [InlineKeyboardButton(f"My {configdualbot.ANGEL_ALIAS}'s Two truths and one lie",
-                              callback_data='angeltwotruthsonelie')],
+        [InlineKeyboardButton(f"My {configdualbot.ANGEL_ALIAS}'s Two truths and one lie", callback_data='angeltwotruthsonelie')],
+        [InlineKeyboardButton(f"Feedback to Game Master", callback_data='gamemastersupport')],
     ]
     reply_markup_Angel = InlineKeyboardMarkup(send_menu_Angel)
     update.message.reply_text(f'Hi {update.message.chat.first_name}! {messagesdualbot.HELP_TEXT_ANGEL}',
@@ -104,6 +104,7 @@ def start_Mortalbot(update: Update, context: CallbackContext) -> None:
         [InlineKeyboardButton(f"My {configdualbot.MORTAL_ALIAS}'s Two truths and one lie",
                               callback_data='mortaltwotruthsonelie')],
         [InlineKeyboardButton(f"My {configdualbot.MORTAL_ALIAS}'s self-intro", callback_data='mortalintroduction')],
+        [InlineKeyboardButton(f"Feedback to Game Master", callback_data='gamemastersupport')],
     ]
     reply_markup_Mortal = InlineKeyboardMarkup(send_menu_Mortal)
     update.message.reply_text(f'Hi {update.message.chat.first_name}! {messagesdualbot.HELP_TEXT_MORTAL}',
@@ -119,6 +120,7 @@ def help_command_ANGEL(update: Update, context: CallbackContext) -> None:
 def help_command_MORTAL(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /help is issued."""
     update.message.reply_text(messagesdualbot.HELP_TEXT_MORTAL)
+
 
 @player.restricted
 def reload_command(update: Update, context: CallbackContext) -> None:
@@ -367,6 +369,69 @@ def sendNonTextMessage(message, bot, chat_id, token):
 angelbot = telegram.Bot(ANGEL_BOT_TOKEN)
 mortalbot = telegram.Bot(MORTAL_BOT_TOKEN)
 
+def startGameMasterSupport (update: Update, context: CallbackContext):
+    playerName = update.callback_query.message.chat.username.lower()
+    if configdualbot.gamemasterchatid is None:
+        update.callback_query.message.reply_text(f"Sorry the gamemaster is not available. Please try again later.")
+        logger.info(messagesdualbot.getNotRegisteredLog(playerName, f"Failed to chat with GameMaster"))
+        return CHOOSING
+
+    update.callback_query.message.reply_text(messagesdualbot.getSupportMessage())
+    return GAMEMASTERSUPPORT
+
+'''
+Note: All support texts will be sent to GameMaster through Mortal Bot
+'''
+
+def sendGameMasterMortalbot(update: Update, context: CallbackContext, bot=mortalbot):
+    playerName = update.message.chat.username.lower()
+    if update.message.text:
+        try:
+            bot.send_message(
+                text=f"<b> SUPPORT from @{update.message.chat.username} of chat_id {update.message.chat_id} using Mortal Bot:</b> {update.message.text}",
+                chat_id=configdualbot.gamemasterchatid,
+                parse_mode=ParseMode.HTML
+            )
+        except:
+            update.message.reply_text(f"Sorry the gamemaster is not available. Please try again later.")
+            return CHOOSING
+    else:
+        sendNonTextMessage(update.message, bot, configdualbot.gamemasterchatid, MORTAL_BOT_TOKEN)
+        bot.send_message(
+            text=f"<b> SUPPORT Non-Text Message from @{update.message.chat.username} of chat_id {update.message.chat_id} using Mortal Bot</b>",
+            chat_id=configdualbot.gamemasterchatid,
+            parse_mode=ParseMode.HTML
+        )
+
+    update.message.reply_text(messagesdualbot.MESSAGE_SENT_TO_GAMEMASTER)
+    logger.info(f"{playerName} used Mortal Bot & sent message to GameMaster")
+
+    return CHOOSING
+
+def sendGameMasterAngelbot(update: Update, context: CallbackContext, bot=mortalbot):
+    playerName = update.message.chat.username.lower()
+    if update.message.text:
+        try:
+            bot.send_message(
+                text=f"<b> SUPPORT from @{update.message.chat.username} of chat_id {update.message.chat_id} using Angel Bot:</b> {update.message.text}",
+                chat_id=configdualbot.gamemasterchatid,
+                parse_mode=ParseMode.HTML
+            )
+        except:
+            update.message.reply_text(f"Sorry the gamemaster is not available. Please try again later.")
+            return CHOOSING
+    else:
+        sendNonTextMessage(update.message, bot, configdualbot.gamemasterchatid, ANGEL_BOT_TOKEN)
+        bot.send_message(
+            text=f"<b> SUPPORT Non-Text Message from @{update.message.chat.username} of chat_id {update.message.chat_id} using Angel Bot</b>",
+            chat_id=configdualbot.gamemasterchatid,
+            parse_mode=ParseMode.HTML
+        )
+
+    update.message.reply_text(messagesdualbot.MESSAGE_SENT_TO_GAMEMASTER)
+    logger.info(f"{playerName} used Angel Bot & sent message to GameMaster")
+
+    return CHOOSING
 
 def sendAngel(update: Update, context: CallbackContext, bot=mortalbot):
     playerName = update.message.chat.username.lower()
@@ -447,6 +512,7 @@ def main():
     # dispatcherAngel.add_handler(CommandHandler("savechatids", savechatids_command))
     # dispatcherAngel.add_handler(CommandHandler("downloadchatids", savechatids_toJSON_command))
 
+
     conv_handler_Angel = ConversationHandler(
         entry_points=[
             CommandHandler('start', start_Angelbot),
@@ -458,9 +524,11 @@ def main():
                     CallbackQueryHandler(startAngel, pattern='messageangel'),
                     CallbackQueryHandler(whoismyAngel, pattern='whoismyangel'),
                     CallbackQueryHandler(angelInterests, pattern='angelinterests'),
-                    CallbackQueryHandler(angelTwotruthsonelie, pattern='angeltwotruthsonelie')
+                    CallbackQueryHandler(angelTwotruthsonelie, pattern='angeltwotruthsonelie'),
+                    CallbackQueryHandler(startGameMasterSupport, pattern='gamemastersupport'),
                 ],
-            ANGEL: [MessageHandler(~Filters.command, sendAngel)]
+            ANGEL: [MessageHandler(~Filters.command, sendAngel)],
+            GAMEMASTERSUPPORT: [MessageHandler(~Filters.command, sendGameMasterAngelbot)]
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
@@ -477,9 +545,11 @@ def main():
                     CallbackQueryHandler(whoismyMortal, pattern='whoismymortal'),
                     CallbackQueryHandler(mortalInterests, pattern='mortalinterests'),
                     CallbackQueryHandler(mortalTwotruthsonelie, pattern='mortaltwotruthsonelie'),
-                    CallbackQueryHandler(mortalIntroduction, pattern='mortalintroduction')
+                    CallbackQueryHandler(mortalIntroduction, pattern='mortalintroduction'),
+                    CallbackQueryHandler(startGameMasterSupport, pattern='gamemastersupport'),
                 ],
-            MORTAL: [MessageHandler(~Filters.command, sendMortal)]
+            MORTAL: [MessageHandler(~Filters.command, sendMortal)],
+            GAMEMASTERSUPPORT: [MessageHandler(~Filters.command, sendGameMasterMortalbot)]
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
