@@ -388,7 +388,7 @@ def sendGameMasterMortalbot(update: Update, context: CallbackContext, bot=mortal
     if update.message.text:
         try:
             bot.send_message(
-                text=f"<b> SUPPORT from @{update.message.chat.username} of chat_id {update.message.chat_id} using Mortal Bot:</b> {update.message.text}",
+                text=f"<b> SUPPORT from @{update.message.chat.username} of chat_id {update.message.chat_id} using Mortal Bot:</b>\n\n{update.message.text}",
                 chat_id=configdualbot.gamemasterchatid,
                 parse_mode=ParseMode.HTML
             )
@@ -413,7 +413,7 @@ def sendGameMasterAngelbot(update: Update, context: CallbackContext, bot=mortalb
     if update.message.text:
         try:
             bot.send_message(
-                text=f"<b> SUPPORT from @{update.message.chat.username} of chat_id {update.message.chat_id} using Angel Bot:</b> {update.message.text}",
+                text=f"<b> SUPPORT from @{update.message.chat.username} of chat_id {update.message.chat_id} using Angel Bot:</b>\n\n{update.message.text}",
                 chat_id=configdualbot.gamemasterchatid,
                 parse_mode=ParseMode.HTML
             )
