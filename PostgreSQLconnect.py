@@ -143,7 +143,6 @@ def import_players_from_csv():
                 cur.execute(
                     f"""
                     INSERT INTO playerlist VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}')
-                    ON CONFLICT DO NOTHING
                     """
                 )
         # close communication with the PostgreSQL database server
@@ -152,7 +151,7 @@ def import_players_from_csv():
         conn.commit()
         print (f"PLAYERS_FILENAME imported successfully into SQL database")
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print(error)                                                                            ###NOTE: if you get Index error, open the CSV as notepad, then delete the last empty row. It is a known bug when exporting CSVs from SQL. Then it should be able to import flawlessly
     finally:
         if conn is not None:
             conn.close()
