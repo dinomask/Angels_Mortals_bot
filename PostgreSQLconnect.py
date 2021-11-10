@@ -142,9 +142,14 @@ def import_players_from_csv():
             for row in reader:
                 cur.execute(
                     f"""
-                    INSERT INTO playerlist VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}')
+                    INSERT INTO playerlist (player,angel,mortal,gender,interests,twotruthsonelie,intro)
+                    VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}')
+                    ON CONFLICT (player) DO UPDATE 
+                    SET (angel,mortal,gender,interests,twotruthsonelie,intro)
+                    =  ('{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}')
+                    WHERE playerlist.player = '{row[0]}'; 
                     """
-                )
+                )               ## Somehow, if you do not put playerlist.player, it will throw "ambiguous column" error
         # close communication with the PostgreSQL database server
         cur.close()
         # commit the changes
@@ -239,27 +244,47 @@ def loadChatID_fromSQL(players: dict):
         if conn is not None:
             conn.close()
 
-# def saveplayerchatids_toSQL(playerusername, chat_id): ###this function works but it's too slow to manually add one by one
-#     commands = (
-#         f"""
-#             INSERT INTO playerchatids (playerusername, chat_id)
-#             VALUES ('{playerusername}', '{chat_id}')
-#             ON CONFLICT (playerusername)
-#             DO NOTHING
-#         """,
-#     )
+
+
+# def saveplayerschatids_toSQL(players: dict):
 #     try:
 #         conn = psycopg2.connect(host=configdualbot.dbhost, port=5432, database=configdualbot.dbname,
 #                                 user=configdualbot.dbuser, password=configdualbot.dbpassword)
 #         cur = conn.cursor()
-#         # create table one by one
-#         for command in commands:
-#             cur.execute(command)
-#         conn.commit()
-#         count = cur.rowcount
-#         print (f"{count} row of chat_id {chat_id} for player {playerusername} is saved!")
+#         data = []
+#         for k, v in players.items():
+#             d = {"playerusername": k, "chat_id": players[k].chat_id}
+#             data.append(d)
+#         command1 = (
+#             f"""
+#             DROP TABLE IF EXISTS
+#             playerchatids;
+#             """,
+#             f"""
+#             CREATE TABLE IF NOT EXISTS playerchatids(
+#                     playerusername VARCHAR(255) PRIMARY KEY,
+#                     chat_id INTEGER NULL,
+#                     FOREIGN KEY (playerusername)
+#                     REFERENCES playerlist (Player)
+#                     ON UPDATE CASCADE ON DELETE CASCADE
+#             )
+#             """
+#         )
+#         for commands in command1:
+#             cur.execute(commands)
+#         print("Command 1 success!")
+#         command2 = (
+#             f"""
+#             INSERT INTO playerchatids
+#             SELECT * FROM jsonb_populate_recordset(null::stringint, '{json.dumps(data)}') AS p
+#             """
+#         )
+#         cur.execute(command2)
 #         # close communication with the PostgreSQL database server
 #         cur.close()
+#         # commit the changes
+#         conn.commit()
+#         print("All Telegram players chat_id were dumped onto playerchatids SQL successfully!")
 #     except (Exception, psycopg2.DatabaseError) as error:
 #         print(error)
 #     finally:
@@ -273,33 +298,31 @@ def saveplayerschatids_toSQL(players: dict): ##USE THIS INSTEAD OF ABOVE FUNCTIO
         cur = conn.cursor()
         data = []
         for k, v in players.items():
-            d = {"playerusername": k, "chat_id": players[k].chat_id}
-            data.append(d)
-        command1 = (
-            f"""
-            DROP TABLE IF EXISTS
-            playerchatids;
-            """,
-            f"""
-            CREATE TABLE IF NOT EXISTS playerchatids(
-                    playerusername VARCHAR(255) PRIMARY KEY,
-                    chat_id INTEGER NULL,
-                    FOREIGN KEY (playerusername)
-                    REFERENCES playerlist (Player)
-                    ON UPDATE CASCADE ON DELETE CASCADE
-            )
-            """
-        )
-        for commands in command1:
-            cur.execute(commands)
-        print("Command 1 success!")
-        command2 = (
-            f"""
-            INSERT INTO playerchatids
-            SELECT * FROM jsonb_populate_recordset(null::stringint, '{json.dumps(data)}') AS p
-            """
-        )
-        cur.execute(command2)
+            if v.chat_id is None:
+                v.chat_id = "null"               ## to make None accepted as [null] in SQL
+                command2 = (
+                    f"""
+                    INSERT INTO playerchatids (playerusername, chat_id)
+                    VALUES ('{k}', {v.chat_id})
+                    ON CONFLICT (playerusername) DO UPDATE 
+                    SET chat_id
+                    = {v.chat_id}
+                    WHERE playerchatids.playerusername = '{k}';
+                    """
+                )
+                cur.execute(command2)
+            else:
+                command2 = (
+                    f"""
+                    INSERT INTO playerchatids (playerusername, chat_id)
+                    VALUES ('{k}', '{v.chat_id}')
+                    ON CONFLICT (playerusername) DO UPDATE 
+                    SET chat_id
+                    = '{v.chat_id}'
+                    WHERE playerchatids.playerusername = '{k}';
+                    """
+                )
+                cur.execute(command2)
         # close communication with the PostgreSQL database server
         cur.close()
         # commit the changes
@@ -311,84 +334,159 @@ def saveplayerschatids_toSQL(players: dict): ##USE THIS INSTEAD OF ABOVE FUNCTIO
         if conn is not None:
             conn.close()
 
-def saveplayerchatids_fromSQL_toJSON(): ##JUST IN CASE FUNCTION
-    commands = (
+def saveplayerchatids_fromSQL_toCSV(): ##Exporting to CSV is better than to JSON
+    command = (
         f"""
             SELECT * FROM
-                playerchatids;
-
-        """,
+                playerchatids
+        """
     )
     try:
         conn = psycopg2.connect(host=configdualbot.dbhost, port=5432, database=configdualbot.dbname,
                                 user=configdualbot.dbuser, password=configdualbot.dbpassword)
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-        # create table one by one
-        for command in commands:
-            cur.execute(command)
-        # close communication with the PostgreSQL database server
+        cur = conn.cursor()
+        cur.execute(command)
         print("Selecting rows from playerchatids table using cursor.fetchall")
         playerchatids_selected = cur.fetchall()
-
-        with open(configdualbot.CHAT_ID_JSON, 'w+') as f:
-            json.dump(playerchatids_selected, f)
+        with open(configdualbot.CHAT_ID_CSV, 'w+', newline = '') as f:
+            write = csv.writer(f)
+            write.writerows(playerchatids_selected)
+        print("Exported CSV from playerchatids table using cursor.fetchall")
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
 
-def import_playerchatids_fromJSON_toSQL(): ##JUST IN CASE FUNCTION
+
+def import_playerchatids_fromCSV_toSQL(): ##JUST IN CASE FUNCTION
     try:
         conn = psycopg2.connect(host=configdualbot.dbhost, port=5432, database=configdualbot.dbname,
                                 user=configdualbot.dbuser, password=configdualbot.dbpassword)
         cur = conn.cursor()
         # create table one by one
-        with open(configdualbot.CHAT_ID_JSON, 'r') as f:
-            data = json.load(f)
-        command1 = (
-            f"""
-            DROP TABLE IF EXISTS
-            playerchatids;
-            """,
-            f"""
-            CREATE TABLE IF NOT EXISTS playerchatids(
-                    playerusername VARCHAR(255) PRIMARY KEY,
-                    chat_id INTEGER NULL,
-                    FOREIGN KEY (playerusername)
-                    REFERENCES playerlist (Player)
-                    ON UPDATE CASCADE ON DELETE CASCADE
-            )
-            """
-        )
-        command2 = (
-            f"""
-            INSERT INTO playerchatids
-            SELECT * FROM json_populate_recordset(null::stringint, '{json.dumps(data)}')
-            """
-        )
-        for commands in command1:
-            cur.execute(commands)
-        print("Command 1 success!")
-        cur.execute(command2)
-        print("CHAT_ID_JSON Dump onto SQL success!")
+        with open(configdualbot.CHAT_ID_CSV, 'r') as f:
+            reader = csv.reader(f, delimiter=',')
+            for row in reader:
+                if row[1] == '':
+                    row[1] = "null"
+                    print(f"{row[0]}, {row[1]}")
+                    cur.execute(
+                        f"""
+                        INSERT INTO playerchatids (playerusername,chat_id)
+                        VALUES ('{row[0]}',{row[1]})
+                        ON CONFLICT (playerusername) DO UPDATE 
+                        SET chat_id
+                        = {row[1]}
+                        WHERE playerchatids.playerusername = '{row[0]}';
+                        """
+                    )
+                else:
+                    print(f"{row[0]}, {row[1]}")
+                    cur.execute(
+                        f"""
+                                        INSERT INTO playerchatids (playerusername,chat_id)
+                                        VALUES ('{row[0]}','{row[1]}')
+                                        ON CONFLICT (playerusername) DO UPDATE 
+                                        SET chat_id
+                                        = '{row[1]}'
+                                        WHERE playerchatids.playerusername = '{row[0]}';
+                                        """
+                    )
+        print("CHAT_ID_CSV Dump onto SQL success!")
         # close communication with the PostgreSQL database server
         cur.close()
         # commit the changes
         conn.commit()
-        print (f"CHAT_ID_JSON is imported successfully into playerchatids SQL database")
+        print (f"CHAT_ID_CSV is imported successfully into playerchatids SQL database")
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
+
+'''
+old JSON functions - complicated and not recommended for use
+'''
+
+# def saveplayerchatids_fromSQL_toJSON(): ##JUST IN CASE FUNCTION
+#     commands = (
+#         f"""
+#             SELECT * FROM
+#                 playerchatids;
+#
+#         """,
+#     )
+#     try:
+#         conn = psycopg2.connect(host=configdualbot.dbhost, port=5432, database=configdualbot.dbname,
+#                                 user=configdualbot.dbuser, password=configdualbot.dbpassword)
+#         cur = conn.cursor(cursor_factory=RealDictCursor)
+#         # create table one by one
+#         for command in commands:
+#             cur.execute(command)
+#         # close communication with the PostgreSQL database server
+#         print("Selecting rows from playerchatids table using cursor.fetchall")
+#         playerchatids_selected = cur.fetchall()
+#
+#         with open(configdualbot.CHAT_ID_JSON, 'w+') as f:
+#             json.dump(playerchatids_selected, f)
+#     except (Exception, psycopg2.DatabaseError) as error:
+#         print(error)
+#     finally:
+#         if conn is not None:
+#             conn.close()
+
+# def import_playerchatids_fromJSON_toSQL(): ##JUST IN CASE FUNCTION
+#     try:
+#         conn = psycopg2.connect(host=configdualbot.dbhost, port=5432, database=configdualbot.dbname,
+#                                 user=configdualbot.dbuser, password=configdualbot.dbpassword)
+#         cur = conn.cursor()
+#         # create table one by one
+#         with open(configdualbot.CHAT_ID_JSON, 'r') as f:
+#             data = json.load(f)
+#         command1 = (
+#             f"""
+#             DROP TABLE IF EXISTS
+#             playerchatids;
+#             """,
+#             f"""
+#             CREATE TABLE IF NOT EXISTS playerchatids(
+#                     playerusername VARCHAR(255) PRIMARY KEY,
+#                     chat_id INTEGER NULL,
+#                     FOREIGN KEY (playerusername)
+#                     REFERENCES playerlist (Player)
+#                     ON UPDATE CASCADE ON DELETE CASCADE
+#             )
+#             """
+#         )
+#         command2 = (
+#             f"""
+#             INSERT INTO playerchatids
+#             SELECT * FROM json_populate_recordset(null::stringint, '{json.dumps(data)}')
+#             """
+#         )
+#         for commands in command1:
+#             cur.execute(commands)
+#         print("Command 1 success!")
+#         cur.execute(command2)
+#         print("CHAT_ID_JSON Dump onto SQL success!")
+#         # close communication with the PostgreSQL database server
+#         cur.close()
+#         # commit the changes
+#         conn.commit()
+#         print (f"CHAT_ID_JSON is imported successfully into playerchatids SQL database")
+#     except (Exception, psycopg2.DatabaseError) as error:
+#         print(error)
+#     finally:
+#         if conn is not None:
+#             conn.close()
 
 
 if __name__ == '__main__':
     # testconnect()
     create_sql_players()
     import_players_from_csv()
-    # import_playerchatids_fromJSON_toSQL()
+    import_playerchatids_fromCSV_toSQL()
     # loadPlayers_fromSQL(players)
     ## print(f"players loaded to dualbot!")
     # loadChatID_fromSQL(players)

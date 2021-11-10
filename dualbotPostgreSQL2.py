@@ -124,11 +124,11 @@ def help_command_MORTAL(update: Update, context: CallbackContext) -> None:
 @player.restricted
 def reload_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /reloadchatids is issued."""
-    PostgreSQLconnect.create_sql_players()
+    # PostgreSQLconnect.create_sql_players()
     PostgreSQLconnect.import_players_from_csv()
-    logger.info(f'Player data has been imported from local csv into SQL server')
-    PostgreSQLconnect.import_playerchatids_fromJSON_toSQL()
-    logger.info(f'Player chat ids have been imported from local JSON into SQL server')
+    logger.info(f'Player data has been imported from local PLAYERS_FILENAME CSV into SQL server')
+    PostgreSQLconnect.import_playerchatids_fromCSV_toSQL()
+    logger.info(f'Player chat ids have been imported from local CHAT_ID_CSV into SQL server')
     update.message.reply_text(f'Players reloaded into SQL!')
 
 @player.restricted
@@ -139,13 +139,13 @@ def savechatids_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(f'Player chat ids are saved in playerchatids SQL!')
 
 @player.restricted
-def savechatids_toJSON_command(update: Update, context: CallbackContext) -> None:
+def savechatids_toCSV_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /downloadchatids is issued."""
     PostgreSQLconnect.saveplayerschatids_toSQL(players)
     logger.info(f'Player chat ids have been saved in playerchatids SQL')
-    PostgreSQLconnect.saveplayerchatids_fromSQL_toJSON()
-    logger.info(f'Player chat ids are downloaded into local JSON!')
-    update.message.reply_text(f'Player chat ids are downloaded into local JSON!')
+    PostgreSQLconnect.saveplayerchatids_fromSQL_toCSV()
+    logger.info(f'Player chat ids are downloaded into local CSV!')
+    update.message.reply_text(f'Player chat ids are downloaded into local CSV!')
 
 
 '''

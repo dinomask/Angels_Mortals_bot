@@ -125,11 +125,11 @@ def help_command_MORTAL(update: Update, context: CallbackContext) -> None:
 @player.restricted
 def reload_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /reloadchatids is issued."""
-    PostgreSQLconnect.create_sql_players()
+    # PostgreSQLconnect.create_sql_players()
     PostgreSQLconnect.import_players_from_csv()
-    logger.info(f'Player data has been imported from local csv into SQL server')
-    PostgreSQLconnect.import_playerchatids_fromJSON_toSQL()
-    logger.info(f'Player chat ids have been imported from local JSON into SQL server')
+    logger.info(f'Player data has been imported from local PLAYERS_FILENAME CSV into SQL server')
+    PostgreSQLconnect.import_playerchatids_fromCSV_toSQL()
+    logger.info(f'Player chat ids have been imported from local CHAT_ID_CSV into SQL server')
     update.message.reply_text(f'Players reloaded into SQL!')
 
 @player.restricted
@@ -140,13 +140,13 @@ def savechatids_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(f'Player chat ids are saved in playerchatids SQL!')
 
 @player.restricted
-def savechatids_toJSON_command(update: Update, context: CallbackContext) -> None:
+def savechatids_toCSV_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /downloadchatids is issued."""
     PostgreSQLconnect.saveplayerschatids_toSQL(players)
     logger.info(f'Player chat ids have been saved in playerchatids SQL')
-    PostgreSQLconnect.saveplayerchatids_fromSQL_toJSON()
-    logger.info(f'Player chat ids are downloaded into local JSON!')
-    update.message.reply_text(f'Player chat ids are downloaded into local JSON!')
+    PostgreSQLconnect.saveplayerchatids_fromSQL_toCSV()
+    logger.info(f'Player chat ids are downloaded into local CSV!')
+    update.message.reply_text(f'Player chat ids are downloaded into local CSV!')
 
 
 
@@ -503,14 +503,14 @@ def main():
     dispatcherMortal.add_handler(CommandHandler("help", help_command_MORTAL))
     dispatcherMortal.add_handler(CommandHandler("reloadchatids", reload_command))
     dispatcherMortal.add_handler(CommandHandler("savechatids", savechatids_command))
-    dispatcherMortal.add_handler(CommandHandler("downloadchatids", savechatids_toJSON_command))
+    dispatcherMortal.add_handler(CommandHandler("downloadchatids", savechatids_toCSV_command))
     # dispatcherMortal.add_handler(CommandHandler("mortal", mortal_command))
 
     # dispatcherAngel.add_handler(CommandHandler("start", start_Angel))
     # dispatcherAngel.add_handler(CommandHandler("help", help_command_ANGEL))
     # dispatcherAngel.add_handler(CommandHandler("reloadchatids", reload_command))
     # dispatcherAngel.add_handler(CommandHandler("savechatids", savechatids_command))
-    # dispatcherAngel.add_handler(CommandHandler("downloadchatids", savechatids_toJSON_command))
+    # dispatcherAngel.add_handler(CommandHandler("downloadchatids", savechatids_toCSV_command))
 
 
     conv_handler_Angel = ConversationHandler(
@@ -558,16 +558,16 @@ def main():
     # dispatcherAngel.add_handler(conv_handler_Angel)
 
     # Start the Bot
-    # updaterMortal.start_polling()
+    updaterMortal.start_polling()
     # updaterAngel.start_polling()
     '''
     The next paragraph of codes replace "updater.start_polling()" 
     to enable listening to webhooks on heroku. See https://towardsdatascience.com/how-to-deploy-a-telegram-bot-using-heroku-for-free-9436f89575d2 for information.
     '''
-    updaterMortal.start_webhook(listen="0.0.0.0",
-                          port=PORT,
-                          url_path=MORTAL_BOT_TOKEN,
-                          webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
+    # updaterMortal.start_webhook(listen="0.0.0.0",
+    #                       port=PORT,
+    #                       url_path=MORTAL_BOT_TOKEN,
+    #                       webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
 
     # updaterAngel.start_webhook(listen="0.0.0.0",
     #                       port=PORT,
