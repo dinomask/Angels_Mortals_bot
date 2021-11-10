@@ -1,4 +1,5 @@
 database.ini
+*.csv
 *.json
 *.env
 *.txt
