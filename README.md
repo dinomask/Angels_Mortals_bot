@@ -6,11 +6,11 @@ Start off anonymous except that your interests, two truths and one lie, and a se
 
 All you need is to collect the Telegram usernames, gender, interests, two truths and one lie, and their self-intro to start playing the game!
 
-![Starting the Angel Bot](AngelsMortalsBotPictures/startcommandAngelBot.jpg)\
-***Starting the Angel Bot***
+![Mortal sends message to Angel using AngelBot](AngelsMortalsBotPictures/sendmessageAngelBot.png)\
+***Mortal sends message to Angel using AngelBot***
 
-![Starting the Mortal Bot](AngelsMortalsBotPictures/startcommandMortalBot.jpg)\
-***Starting the Mortal Bot***
+![Instantly, Angel receives message from Mortal using MortalBot](AngelsMortalsBotPictures/sendmessageMortalBot.png)
+***Instantly, Angel receives message from Mortal using MortalBot***
 
 
 ### Personal thoughts
@@ -34,11 +34,12 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ####
 - **only requires /start on ONE of either bot to start receiving messages:** Alternatively, you may simply type any text and it will be the same as "/start"
 
-![Mortal sends message to Angel using AngelBot](AngelsMortalsBotPictures/sendmessageAngelBot.png)\
-***Mortal sends message to Angel using AngelBot***
+![Starting the Angel Bot](AngelsMortalsBotPictures/startcommandAngelBot.jpg)\
+***Starting the Angel Bot***
 
-![Instantly, Angel receives message from Mortal using MortalBot](AngelsMortalsBotPictures/sendmessageMortalBot.png)
-***Instantly, Angel receives message from Mortal using MortalBot***
+![Starting the Mortal Bot](AngelsMortalsBotPictures/startcommandMortalBot.jpg)\
+***Starting the Mortal Bot***
+
 
 2. Options to see Angel and Mortal's two truths one lie, self-introduction, and interests within the bots.
 - However, self-introduction was not added for Angels to prevent Mortals from identifying their Angels too easily
