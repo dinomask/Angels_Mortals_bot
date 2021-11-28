@@ -6,10 +6,10 @@ Start off anonymous except that your interests, two truths and one lie, and a se
 
 All you need is to collect the Telegram usernames, gender, interests, two truths and one lie, and their self-intro to start playing the game!
 
-![Starting the Angel Bot](AngelsMortalsBotPictures/startcommandAngelBot.jpg)
+![Starting the Angel Bot](AngelsMortalsBotPictures/startcommandAngelBot.jpg)\
 ***Starting the Angel Bot***
 
-![Starting the Mortal Bot](AngelsMortalsBotPictures/startcommandMortalBot.jpg)
+![Starting the Mortal Bot](AngelsMortalsBotPictures/startcommandMortalBot.jpg)\
 ***Starting the Mortal Bot***
 
 
@@ -34,10 +34,10 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ####
 - **only requires /start on ONE of either bot to start receiving messages:** Alternatively, you may simply type any text and it will be the same as "/start"
 
-![Buttons & Responses in Angel Bot](AngelsMortalsBotPictures/buttonsAngelBot.png)
+![Buttons & Responses in Angel Bot](AngelsMortalsBotPictures/buttonsAngelBot.png)\
 ***Buttons & Responses in Angel Bot***
 
-![Buttons & Responses in Mortal Bot](AngelsMortalsBotPictures/buttonsMortalBot.png)
+![Buttons & Responses in Mortal Bot](AngelsMortalsBotPictures/buttonsMortalBot.png)\
 ***Buttons & Responses in Mortal Bot***
 
 
