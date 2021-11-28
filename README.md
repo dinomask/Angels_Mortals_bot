@@ -9,7 +9,7 @@ All you need is to collect the Telegram usernames, gender, interests, two truths
 ![Mortal sends message to Angel using AngelBot](AngelsMortalsBotPictures/sendmessageAngelBot.png)\
 ***Mortal sends message to Angel using AngelBot***
 
-![Instantly, Angel receives message from Mortal using MortalBot](AngelsMortalsBotPictures/sendmessageMortalBot.png)
+![Instantly, Angel receives message from Mortal using MortalBot](AngelsMortalsBotPictures/sendmessageMortalBot.png)\
 ***Instantly, Angel receives message from Mortal using MortalBot***
 
 
