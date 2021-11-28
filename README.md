@@ -2,12 +2,15 @@
 
 Send anonymous messages between angels and mortals using two bots!
 
-![Mortal sends message to Angel using AngelBot](AngelsMortalsBotPictures/sendmessageAngelBot.png)
-![Instantly, Angel receives message from Mortal using MortalBot](AngelsMortalsBotPictures/sendmessageMortalBot.png)
-
 Start off anonymous except that your interests, two truths and one lie, and a self-intro are revealed to each other.
 
 All you need is to collect the Telegram usernames, gender, interests, two truths and one lie, and their self-intro to start playing the game!
+
+![Starting the Angel Bot](AngelsMortalsBotPictures/startcommandAngelBot.jpg)
+***Starting the Angel Bot***
+
+![Starting the Mortal Bot](AngelsMortalsBotPictures/startcommandMortalBot.jpg)
+***Starting the Mortal Bot***
 
 
 ### Personal thoughts
@@ -31,19 +34,51 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ####
 - **only requires /start on ONE of either bot to start receiving messages:** Alternatively, you may simply type any text and it will be the same as "/start"
 
+![Buttons & Responses in Angel Bot](AngelsMortalsBotPictures/buttonsAngelBot.png)
+***Buttons & Responses in Angel Bot***
 
-2. Options to see Angel and Mortal's two truths one lie, self-introduction, and interests within the bots
+![Buttons & Responses in Mortal Bot](AngelsMortalsBotPictures/buttonsMortalBot.png)
+***Buttons & Responses in Mortal Bot***
+
+
+2. Options to see Angel and Mortal's two truths one lie, self-introduction, and interests within the bots.
 - However, self-introduction was not added for Angels to prevent Mortals from identifying their Angels too easily
 ####
 - Added "Who is my mortal?" option to see their mortal's Telegram username & gender
 ####
 - Added read_csv functions to save the aforementioned properties (e.g. interests) into the Player objects
 
-3. Ability to feedback to the Game Master
-- The Game Master's chat id will be used by the bot
-- If a message is sent, 
+![Buttons & Responses in Mortal Bot](AngelsMortalsBotPictures/buttonsMortalBot.png)
+***Buttons & Responses in Mortal Bot***
 
-5. Locked all administrative functions to the Game Master
+![Buttons & Responses in Angel Bot](AngelsMortalsBotPictures/buttonsAngelBot.png)
+***Buttons & Responses in Angel Bot***
+
+3. Ability to feedback to the Game Master.
+- The Game Master's chat id will be used by the bot.
+- A support request can be sent either through the Angel Bot or Mortal Bot
+- If a message is sent, the Game Master will receive the Support request from Mortal Bot only for simplicity
+
+![Game Master receives Support request from Mortal Bot](AngelsMortalsBotPictures/GameMasterSupport.png)
+***Game Master receives Support request from Mortal Bot***
+
+5. Enables administrative commands within Telegram bots, restricted for use only by the Game Master.
+- Under exceptional circumstances, the Game Master may use the following commands within the Telegram bots:
+> /savechatids - Just-in-case manual command to save chat ids into the SQL database thus remembering everyone that has started the bots once. But this is done automatically whenever the bot goes to sleep on Heroku after 30 min of inactivity.
+>
+> /reloadchatids - Just-in-case manual command, as this will bascially be done every time you start the bot to reload all players into the game with the correct Angel-Mortal pairings
+> 
+> /downloadchatids - Just-in-case manual command to store chatids locally, in the rare event that SQL database cannot be used
+> 
+> /help - Just-in-case manual command, currently not in use.
+
+![Game Master commands with bot responses](AngelsMortalsBotPictures/GameMastercommands.png)
+***Game Master commands with successful bot responses***
+
+- If a non-Game Master player tries to use the commands, the commands 
+
+![non-Game Master player cannot use the restricted commands](AngelsMortalsBotPictures/nonGameMasterdisallowed.png)
+***non-Game Master player cannot use the restricted commands***
 
 ## Instructions
 
