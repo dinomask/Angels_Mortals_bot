@@ -65,7 +65,7 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 
 4. Enables administrative commands within Telegram bots, restricted for use only by the Game Master.
 - Under exceptional circumstances, the Game Master may use the following commands within the Telegram bots:
-> /savechatids - Just-in-case manual command to save chat ids into the SQL database thus remembering everyone that has started the bots once. But this is done automatically whenever the bot goes to sleep on Heroku after 30 min of inactivity.
+> /savechatids - Just-in-case manual command to save chat ids into the SQL database thus remembering everyone that has started the bots once. But this is done automatically whenever the bot goes to sleep on Heroku after 30 minutes of inactivity or when the bot is safely stopped.
 >
 > /reloadchatids - Just-in-case manual command, as this will bascially be done every time you start the bot to reload all players into the game with the correct Angel-Mortal pairings
 > 
