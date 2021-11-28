@@ -119,7 +119,7 @@ _(Special thanks to Kingston Kuan for this idea)_
 
 ### How to run a Telegram bot on Heroku
 1. First, sign up for an account on Heroku, and create two new projects on your Heroku account.
-2. Clone this github repository twice. Then, link each copy to each of the 2 empty Heroku projects you've just created.
+2. Clone this GitHub repo twice. Then, link each GitHub repo copy to each of the 2 empty Heroku projects you've just created on Heroku itself.
 3. Install the PostgreSQL database addon within Heroku (you'd have to Google if you aren't sure how), and get the required database information required for the next step.
 4. Next, key in the following information in "configdualbot.py":\
 herokuappname = os.environ['herokuappname']\
@@ -133,6 +133,9 @@ gamemasterchatid = os.environ['gamemasterchatid']
 6. Always remember to sync the new changes on Heroku after making the updates on their respectively linked GitHub repos!
 7. Heroku should run the bots automatically after the syncing on Heroku. Please troubleshoot accordingly by checking the Heroku error log (again, Google if you aren't sure).
 
+*NOTE: since you are running the bot on Heroku, you are not using _dualbot.py_ at all.\
+You will be using _dualbotPostgreSQL1.py_ & _dualbotPostgreSQL2.py_ instead to run the Angel & Mortal bots separately on 2 different Heroku projects.\
+It is impossible to run the 2 bots together within a single Heroku project (not impt info if you don't understand: it is impossible to run two bots using Webhook on the same Heroku project)* 
 
 ### If you somehow only want a single bot 
 Run bot.py instead.
