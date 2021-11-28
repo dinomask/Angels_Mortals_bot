@@ -1,4 +1,4 @@
-# Elgene's Angel and Mortals Dual Telegram Bots
+# yeozhenhao's Angel and Mortals Dual Telegram Bots
 
 Send anonymous messages between angels and mortals using two bots!
 
