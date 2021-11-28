@@ -76,7 +76,7 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ![Game Master commands with bot responses](AngelsMortalsBotPictures/GameMastercommands.png)\
 ***Game Master commands with successful bot responses***
 
-- If a non-Game Master player tries to use the commands, the commands 
+- If a non-Game Master player tries to use the commands, the bot will not run the command.
 
 ![non-Game Master player cannot use the restricted commands](AngelsMortalsBotPictures/nonGameMasterdisallowed.png)\
 ***non-Game Master player cannot use the restricted commands***
