@@ -103,9 +103,10 @@ where the usernames are Telegram usernames without the "@".
 3. Put the "playerlist.csv" in the root folder with all the other python scripts (e.g. dualbot.py)
 
 
-4. Run dualbot.py 
+4. Run dualbot.py preferably on a server like Heroku (see below if you want to learn how).
 
-### Environment variables required
+
+### Environment variables required (without Heroku)
 MORTAL_BOT_TOKEN = os.environ['MORTAL_BOT_TOKEN']\
 ANGEL_BOT_TOKEN = os.environ['ANGEL_BOT_TOKEN']\
 PLAYERS_FILENAME = os.environ['PLAYERS_FILENAME']\
@@ -115,6 +116,23 @@ MORTAL_ALIAS = os.environ['MORTAL_ALIAS']
 
 Calling 'Angels' & 'Mortals' too mainstream for you? Change them in the os.environ 'ANGEL_ALIAS' or 'MORTAL_ALIAS' to something else!\
 _(Special thanks to Kingston Kuan for this idea)_
+
+### How to run a Telegram bot on Heroku
+1. First, sign up for an account on Heroku, and create two new projects on your Heroku account.
+2. Clone this github repository twice. Then, link each copy to each of the 2 empty Heroku projects you've just created.
+3. Install the PostgreSQL database addon within Heroku (you'd have to Google if you aren't sure how), and get the required database information required for the next step.
+4. Next, key in the following information in "configdualbot.py":\
+herokuappname = os.environ['herokuappname']\
+dbhost = os.environ['dbhost']\
+dbname = os.environ['dbname']\
+dbuser = os.environ['dbuser']\
+dbpassword = os.environ['dbpassword']\
+gamemasterchatid = os.environ['gamemasterchatid']
+
+5. Edit the Procfile for each of the two copies of GitHub repo such that one Procfile should be *dualbotPostgreSQL1.py*, and the other Procfile should be *dualbotPostgreSQL2.py*. FYI: Procfile is only important to tell Heroku which python file it should run.
+6. Always remember to sync the new changes on Heroku after making the updates on their respectively linked GitHub repos!
+7. Heroku should run the bots automatically after the syncing on Heroku. Please troubleshoot accordingly by checking the Heroku error log (again, Google if you aren't sure).
+
 
 ### If you somehow only want a single bot 
 Run bot.py instead.
