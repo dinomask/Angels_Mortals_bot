@@ -2,8 +2,8 @@
 
 Send anonymous messages between angels and mortals using two bots!
 
-![Mortal sends message to Angel using AngelBot](AngelsMortalsBotPictures\sendmessageAngelBot.png)
-![Instantly, Angel receives message from Mortal using MortalBot](AngelsMortalsBotPictures\sendmessageMortalBot.png)
+![Mortal sends message to Angel using AngelBot](AngelsMortalsBotPictures/sendmessageAngelBot.png)
+![Instantly, Angel receives message from Mortal using MortalBot](AngelsMortalsBotPictures/sendmessageMortalBot.png)
 
 Start off anonymous except that your interests, two truths and one lie, and a self-intro are revealed to each other.
 
