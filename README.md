@@ -63,7 +63,7 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ![Game Master receives Support request from Mortal Bot](AngelsMortalsBotPictures/GameMasterSupport.png)\
 ***Game Master receives Support request from Mortal Bot***
 
-5. Enables administrative commands within Telegram bots, restricted for use only by the Game Master.
+4. Enables administrative commands within Telegram bots, restricted for use only by the Game Master.
 - Under exceptional circumstances, the Game Master may use the following commands within the Telegram bots:
 > /savechatids - Just-in-case manual command to save chat ids into the SQL database thus remembering everyone that has started the bots once. But this is done automatically whenever the bot goes to sleep on Heroku after 30 min of inactivity.
 >
@@ -79,7 +79,7 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 - If a non-Game Master player tries to use the commands, the bot will not run the command.
 
 ![non-Game Master player cannot use the restricted commands](AngelsMortalsBotPictures/nonGameMasterdisallowed.png)\
-***non-Game Master player cannot use the restricted commands***
+***A non-Game Master player cannot use the restricted commands***
 
 ## Instructions
 
