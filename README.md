@@ -2,6 +2,9 @@
 
 Send anonymous messages between angels and mortals using two bots!
 
+![Mortal sends message to Angel using AngelBot](\AngelsMortalsBotPictures\sendmessageAngelBot.png)
+![Instantly, Angel receives message from Mortal using MortalBot](\AngelsMortalsBotPictures\sendmessageMortalBot.png)
+
 Start off anonymous except that your interests, two truths and one lie, and a self-intro are revealed to each other.
 
 All you need is to collect the Telegram usernames, gender, interests, two truths and one lie, and their self-intro to start playing the game!
@@ -11,8 +14,7 @@ All you need is to collect the Telegram usernames, gender, interests, two truths
 - I felt that revealing the gender was important to contextualise the conversation
 - Interests, two truths and one lie & self-intro were added to encourage people to break the ice & start the conversation.\
 I felt these info were **essential** with the COVID19 restrictions & online learning, as students may never be able to physically meet each other.
-- Also my gut feeling is that this bot can be just as effective as a matchmaking bot (but everyone gets two potential matches).\
-NUS Aphrodite matchmaking uses interests, two truths one lie to break the ice too. But this bot still enables some form of anonymity (hopefully more exciting?).
+- This bot can be just as effective as a matchmaking bot (with everyone getting two potential matches) using introduction, interests & two truths one lie to break the ice. But this bot still enables some form of anonymity (hopefully more exciting?).
 
 
 ### Accreditation
@@ -36,6 +38,12 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 - Added "Who is my mortal?" option to see their mortal's Telegram username & gender
 ####
 - Added read_csv functions to save the aforementioned properties (e.g. interests) into the Player objects
+
+3. Ability to feedback to the Game Master
+- The Game Master's chat id will be used by the bot
+- If a message is sent, 
+
+5. Locked all administrative functions to the Game Master
 
 ## Instructions
 
@@ -72,12 +80,12 @@ MORTAL_ALIAS = os.environ['MORTAL_ALIAS']
 Calling 'Angels' & 'Mortals' too mainstream for you? Change them in the os.environ 'ANGEL_ALIAS' or 'MORTAL_ALIAS' to something else!\
 _(Special thanks to Kingston Kuan for this idea)_
 
-### If you only want a single bot purely for the anonymous messaging 
+### If you somehow only want a single bot 
 Run bot.py instead.
 
 The files: **bot.py**, **config.py**, and **messages.py** are meant solely for the single bot and can be deleted if you only want the dual bot functionality.
 
-Most of the code for the single bot is from **Kingston Kuan** (I have only made few minor changes and have not added the special functions of the dual bot).
+The code is essentially the same as that from **Kingston Kuan** (I have only made few minor changes and have not added the special functions of the dual bot).
 
 ### If you're looking for a matching algorithm to quickly match players for Angels & Mortals
 Please see my other Python repository here:\
