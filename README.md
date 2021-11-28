@@ -34,12 +34,11 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ####
 - **only requires /start on ONE of either bot to start receiving messages:** Alternatively, you may simply type any text and it will be the same as "/start"
 
-![Buttons & Responses in Angel Bot](AngelsMortalsBotPictures/buttonsAngelBot.png)\
-***Buttons & Responses in Angel Bot***
+![Mortal sends message to Angel using AngelBot](AngelsMortalsBotPictures/sendmessageAngelBot.png)\
+***Mortal sends message to Angel using AngelBot***
 
-![Buttons & Responses in Mortal Bot](AngelsMortalsBotPictures/buttonsMortalBot.png)\
-***Buttons & Responses in Mortal Bot***
-
+![Instantly, Angel receives message from Mortal using MortalBot](AngelsMortalsBotPictures/sendmessageMortalBot.png)
+***Instantly, Angel receives message from Mortal using MortalBot***
 
 2. Options to see Angel and Mortal's two truths one lie, self-introduction, and interests within the bots.
 - However, self-introduction was not added for Angels to prevent Mortals from identifying their Angels too easily
@@ -48,11 +47,12 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ####
 - Added read_csv functions to save the aforementioned properties (e.g. interests) into the Player objects
 
+![Buttons & Responses in Angel Bot](AngelsMortalsBotPictures/buttonsAngelBot.png)\
+***Buttons & Responses in Angel Bot***
+
 ![Buttons & Responses in Mortal Bot](AngelsMortalsBotPictures/buttonsMortalBot.png)\
 ***Buttons & Responses in Mortal Bot***
 
-![Buttons & Responses in Angel Bot](AngelsMortalsBotPictures/buttonsAngelBot.png)\
-***Buttons & Responses in Angel Bot***
 
 3. Ability to feedback to the Game Master.
 - The Game Master's chat id will be used by the bot.
