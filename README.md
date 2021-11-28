@@ -48,10 +48,10 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ####
 - Added read_csv functions to save the aforementioned properties (e.g. interests) into the Player objects
 
-![Buttons & Responses in Mortal Bot](AngelsMortalsBotPictures/buttonsMortalBot.png)
+![Buttons & Responses in Mortal Bot](AngelsMortalsBotPictures/buttonsMortalBot.png)\
 ***Buttons & Responses in Mortal Bot***
 
-![Buttons & Responses in Angel Bot](AngelsMortalsBotPictures/buttonsAngelBot.png)
+![Buttons & Responses in Angel Bot](AngelsMortalsBotPictures/buttonsAngelBot.png)\
 ***Buttons & Responses in Angel Bot***
 
 3. Ability to feedback to the Game Master.
@@ -59,7 +59,7 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 - A support request can be sent either through the Angel Bot or Mortal Bot
 - If a message is sent, the Game Master will receive the Support request from Mortal Bot only for simplicity
 
-![Game Master receives Support request from Mortal Bot](AngelsMortalsBotPictures/GameMasterSupport.png)
+![Game Master receives Support request from Mortal Bot](AngelsMortalsBotPictures/GameMasterSupport.png)\
 ***Game Master receives Support request from Mortal Bot***
 
 5. Enables administrative commands within Telegram bots, restricted for use only by the Game Master.
@@ -72,12 +72,12 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 > 
 > /help - Just-in-case manual command, currently not in use.
 
-![Game Master commands with bot responses](AngelsMortalsBotPictures/GameMastercommands.png)
+![Game Master commands with bot responses](AngelsMortalsBotPictures/GameMastercommands.png)\
 ***Game Master commands with successful bot responses***
 
 - If a non-Game Master player tries to use the commands, the commands 
 
-![non-Game Master player cannot use the restricted commands](AngelsMortalsBotPictures/nonGameMasterdisallowed.png)
+![non-Game Master player cannot use the restricted commands](AngelsMortalsBotPictures/nonGameMasterdisallowed.png)\
 ***non-Game Master player cannot use the restricted commands***
 
 ## Instructions
