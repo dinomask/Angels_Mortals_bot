@@ -121,7 +121,7 @@ _(Special thanks to Kingston Kuan for this idea)_
 1. First, sign up for an account on Heroku, and create two new projects on your Heroku account.
 2. Clone this GitHub repo twice. Then, link each GitHub repo copy to each of the 2 empty Heroku projects you've just created on Heroku itself.
 3. Install the PostgreSQL database addon within Heroku (you'd have to Google if you aren't sure how), and get the required database information required for the next step.
-4. Next, key in the following information in "configdualbot.py":\
+4. Next, for both Heroku projects, key in the following information in Heroku environment variables as required by the os environment variables in "configdualbot.py":\
 herokuappname = os.environ['herokuappname']\
 dbhost = os.environ['dbhost']\
 dbname = os.environ['dbname']\
