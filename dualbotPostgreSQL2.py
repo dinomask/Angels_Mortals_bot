@@ -508,7 +508,7 @@ def main():
     dispatcherAngel.add_handler(CommandHandler("help", help_command_ANGEL))
     dispatcherAngel.add_handler(CommandHandler("reloadchatids", reload_command))
     dispatcherAngel.add_handler(CommandHandler("savechatids", savechatids_command))
-    dispatcherAngel.add_handler(CommandHandler("downloadchatids", savechatids_toJSON_command))
+    dispatcherAngel.add_handler(CommandHandler("downloadchatids", savechatids_toCSV_command))
 
     conv_handler_Angel = ConversationHandler(
         entry_points=[
