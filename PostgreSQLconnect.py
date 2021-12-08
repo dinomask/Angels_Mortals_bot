@@ -232,7 +232,7 @@ def loadChatID_fromSQL(players: dict):
         print("Selecting rows from playerchatids table using cursor.fetchall")
         playerchatids_selected = cur.fetchall()
         for row in playerchatids_selected:
-            playerName = row[0].strip().lower()
+            playerName = row[0].strip()
             chatid = row[1]
             players[playerName].chat_id = chatid
         # close communication with the PostgreSQL database server
