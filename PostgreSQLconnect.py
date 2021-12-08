@@ -182,9 +182,9 @@ def loadPlayers_fromSQL(players: dict): ##NOTE: this also loads the chat ids fro
         playerlist_selected = cur.fetchall()
         for row in playerlist_selected:
             print(row)
-            playerName = row[0].strip()  ##Note: Player is in 1st column. Angel is in 2nd column, Mortal is in 3rd column.
-            angelName = row[1].strip()
-            mortalName = row[2].strip()
+            playerName = row[0].strip().lower()  ##Note: Player is in 1st column. Angel is in 2nd column, Mortal is in 3rd column.
+            angelName = row[1].strip().lower()
+            mortalName = row[2].strip().lower()
             genderPlayer = row[3].strip()
             interests = row[4].strip()
             twotruthsonelie = row[5].strip()
@@ -232,7 +232,7 @@ def loadChatID_fromSQL(players: dict):
         print("Selecting rows from playerchatids table using cursor.fetchall")
         playerchatids_selected = cur.fetchall()
         for row in playerchatids_selected:
-            playerName = row[0].strip()
+            playerName = row[0].strip().lower()
             chatid = row[1]
             players[playerName].chat_id = chatid
         # close communication with the PostgreSQL database server
