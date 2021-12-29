@@ -101,7 +101,7 @@ def create_sql_players():
         """
         CREATE TABLE playerchatids (
                 playerusername VARCHAR(255) PRIMARY KEY,
-                chat_id INTEGER NULL,
+                chat_id BIGINT NULL,
                 FOREIGN KEY (playerusername)
                 REFERENCES playerlist (Player)
                 ON UPDATE CASCADE ON DELETE CASCADE
@@ -109,7 +109,7 @@ def create_sql_players():
         """,
         """
         DROP TYPE IF EXISTS stringint;
-        CREATE TYPE stringint AS (playerusername text, chat_id int);
+        CREATE TYPE stringint AS (playerusername text, chat_id bigint);
         """,
         )
     try:
@@ -263,7 +263,7 @@ def loadChatID_fromSQL(players: dict):
 #             f"""
 #             CREATE TABLE IF NOT EXISTS playerchatids(
 #                     playerusername VARCHAR(255) PRIMARY KEY,
-#                     chat_id INTEGER NULL,
+#                     chat_id BIGINT NULL,
 #                     FOREIGN KEY (playerusername)
 #                     REFERENCES playerlist (Player)
 #                     ON UPDATE CASCADE ON DELETE CASCADE
@@ -296,17 +296,17 @@ def saveplayerschatids_toSQL(players: dict): ##USE THIS INSTEAD OF ABOVE FUNCTIO
         conn = psycopg2.connect(host=configdualbot.dbhost, port=5432, database=configdualbot.dbname,
                                 user=configdualbot.dbuser, password=configdualbot.dbpassword)
         cur = conn.cursor()
-        data = []
         for k, v in players.items():
+            logger.info(f"{k}, {v.chat_id}")
             if v.chat_id is None:
-                v.chat_id = "null"               ## to make None accepted as [null] in SQL
+                # v.chat_id = "null"    ## this DOES NOT WORK - invalid input syntax for type bigint: "null"
                 command2 = (
                     f"""
                     INSERT INTO playerchatids (playerusername, chat_id)
-                    VALUES ('{k}', {v.chat_id})
+                    VALUES ('{k}', NULL)
                     ON CONFLICT (playerusername) DO UPDATE 
                     SET chat_id
-                    = {v.chat_id}
+                    = NULL
                     WHERE playerchatids.playerusername = '{k}';
                     """
                 )
@@ -327,9 +327,11 @@ def saveplayerschatids_toSQL(players: dict): ##USE THIS INSTEAD OF ABOVE FUNCTIO
         cur.close()
         # commit the changes
         conn.commit()
-        print("All Telegram players chat_id were dumped onto playerchatids SQL successfully!")
+        print(f"All Telegram players chat_id were dumped onto playerchatids SQL successfully!")
+        logger.info(f"All Telegram players chat_id from were dumped onto playerchatids SQL successfully!")
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+        logger.info(error)
     finally:
         if conn is not None:
             conn.close()
@@ -369,15 +371,15 @@ def import_playerchatids_fromCSV_toSQL(): ##JUST IN CASE FUNCTION
             reader = csv.reader(f, delimiter=',')
             for row in reader:
                 if row[1] == '':
-                    row[1] = "null"
+                    # row[1] = "null"
                     print(f"{row[0]}, {row[1]}")
                     cur.execute(
                         f"""
                         INSERT INTO playerchatids (playerusername,chat_id)
-                        VALUES ('{row[0]}',{row[1]})
+                        VALUES ('{row[0]}',NULL)
                         ON CONFLICT (playerusername) DO UPDATE 
                         SET chat_id
-                        = {row[1]}
+                        = NULL
                         WHERE playerchatids.playerusername = '{row[0]}';
                         """
                     )
@@ -385,13 +387,13 @@ def import_playerchatids_fromCSV_toSQL(): ##JUST IN CASE FUNCTION
                     print(f"{row[0]}, {row[1]}")
                     cur.execute(
                         f"""
-                                        INSERT INTO playerchatids (playerusername,chat_id)
-                                        VALUES ('{row[0]}','{row[1]}')
-                                        ON CONFLICT (playerusername) DO UPDATE 
-                                        SET chat_id
-                                        = '{row[1]}'
-                                        WHERE playerchatids.playerusername = '{row[0]}';
-                                        """
+                        INSERT INTO playerchatids (playerusername,chat_id)
+                        VALUES ('{row[0]}','{row[1]}')
+                        ON CONFLICT (playerusername) DO UPDATE 
+                        SET chat_id
+                        = '{row[1]}'
+                        WHERE playerchatids.playerusername = '{row[0]}';
+                        """
                     )
         print("CHAT_ID_CSV Dump onto SQL success!")
         # close communication with the PostgreSQL database server
@@ -452,7 +454,7 @@ old JSON functions - complicated and not recommended for use
 #             f"""
 #             CREATE TABLE IF NOT EXISTS playerchatids(
 #                     playerusername VARCHAR(255) PRIMARY KEY,
-#                     chat_id INTEGER NULL,
+#                     chat_id BIGINT NULL,
 #                     FOREIGN KEY (playerusername)
 #                     REFERENCES playerlist (Player)
 #                     ON UPDATE CASCADE ON DELETE CASCADE

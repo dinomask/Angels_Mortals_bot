@@ -366,8 +366,8 @@ def sendNonTextMessage(message, bot, chat_id, token):
     #                   )
 
 
-angelbot = telegram.Bot(ANGEL_BOT_TOKEN)
-mortalbot = telegram.Bot(MORTAL_BOT_TOKEN)
+angelbot = telegram.Bot(configdualbot.ANGEL_BOT_TOKEN)
+mortalbot = telegram.Bot(configdualbot.MORTAL_BOT_TOKEN)
 
 def startGameMasterSupport (update: Update, context: CallbackContext):
     playerName = update.callback_query.message.chat.username.lower()
@@ -558,16 +558,16 @@ def main():
     # dispatcherAngel.add_handler(conv_handler_Angel)
 
     # Start the Bot
-    # updaterMortal.start_polling()
+    updaterMortal.start_polling()
     # updaterAngel.start_polling()
     '''
     The next paragraph of codes replace "updater.start_polling()" 
     to enable listening to webhooks on heroku. See https://towardsdatascience.com/how-to-deploy-a-telegram-bot-using-heroku-for-free-9436f89575d2 for information.
     '''
-    updaterMortal.start_webhook(listen="0.0.0.0",
-                          port=PORT,
-                          url_path=MORTAL_BOT_TOKEN,
-                          webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
+    # updaterMortal.start_webhook(listen="0.0.0.0",
+    #                       port=PORT,
+    #                       url_path=MORTAL_BOT_TOKEN,
+    #                       webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
 
     # updaterAngel.start_webhook(listen="0.0.0.0",
     #                       port=PORT,
