@@ -1,4 +1,5 @@
 import configdualbot
+from telegram import messageentity
 
 MESSAGE_SENT = 'Message sent!'
 MESSAGE_SENT_TO_GAMEMASTER = 'Message sent to the Game Master! You may now click other buttons in the main menu.'
@@ -50,3 +51,53 @@ def getSentMessageLog(alias, sender, receiver):
 
 def getNotRegisteredLog(alias, sender, receiver):
     return f'{sender} {alias} {receiver} has not started the bot'
+
+def getMessageEntitybyYou(UpdateMessageText, UpdateReplyToMessageText, UpdateMessageEntities):
+    effective_message_max_offset_length = len(UpdateMessageText)
+    # print(effective_message_max_offset_length)
+    max_length_reply_message = len(UpdateReplyToMessageText)
+    # print(max_length_reply_message)
+    offset_length_before_reply_message = effective_message_max_offset_length + 28  ##28 is the number of char in bot.send_message with reply, "You" template
+    # print(offset_length_before_reply_message)
+    list_of_entities = UpdateMessageEntities
+    bold_entity01 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 26,
+                                                         length=1)
+    bold_entity02 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 10,
+                                                         length=6)
+    bold_entity03 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 3,
+                                                         length=1)
+    italic_entity01 = messageentity.MessageEntity(type="italic", offset=offset_length_before_reply_message,
+                                                           length=max_length_reply_message)
+    underline_entity = messageentity.MessageEntity(type="underline",
+                                                            offset=offset_length_before_reply_message - 23, length=12)
+    list_of_entities.append(bold_entity01)
+    list_of_entities.append(bold_entity02)
+    list_of_entities.append(bold_entity03)
+    list_of_entities.append(italic_entity01)
+    list_of_entities.append(underline_entity)
+    return list_of_entities
+
+def getMessageEntitybyYourALIAS(UpdateMessageText, UpdateReplyToMessageText, UpdateMessageEntities, LenALIAS):
+    effective_message_max_offset_length = len(UpdateMessageText)
+    # print(effective_message_max_offset_length)
+    max_length_reply_message = len(UpdateReplyToMessageText)
+    # print(max_length_reply_message)
+    offset_length_before_reply_message = effective_message_max_offset_length + 30 + LenALIAS  ##30 + LenALIAS is the number of char in bot.send_message with reply, "You" template
+    # print(offset_length_before_reply_message)
+    list_of_entities = UpdateMessageEntities
+    bold_entity01 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 28 - LenALIAS,
+                                                         length=1)
+    bold_entity02 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 12 - LenALIAS,
+                                                         length=8 + LenALIAS)
+    bold_entity03 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 3,
+                                                         length=1)
+    italic_entity01 = messageentity.MessageEntity(type="italic", offset=offset_length_before_reply_message,
+                                                           length=max_length_reply_message)
+    underline_entity = messageentity.MessageEntity(type="underline",
+                                                            offset=offset_length_before_reply_message - 25 - LenALIAS, length=12)
+    list_of_entities.append(bold_entity01)
+    list_of_entities.append(bold_entity02)
+    list_of_entities.append(bold_entity03)
+    list_of_entities.append(italic_entity01)
+    list_of_entities.append(underline_entity)
+    return list_of_entities

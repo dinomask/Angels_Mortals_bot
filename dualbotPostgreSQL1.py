@@ -438,8 +438,9 @@ def sendAngel(update: Update, context: CallbackContext, bot=mortalbot):
     # logger.info(f'{context.bot}')
     if update.message.text:
         try:
+            testmessage = update.message.reply_to_message.text
             bot.send_message(
-                text=update.message.text,
+                text=f"{update.message.text} + {testmessage}",
                 chat_id=players[playerName].angel.chat_id
             )
         except:
@@ -459,19 +460,59 @@ def sendAngel(update: Update, context: CallbackContext, bot=mortalbot):
 def sendMortal(update: Update, context: CallbackContext, bot=angelbot):
     playerName = update.message.chat.username.lower()
     # logger.info(f'{context.bot}') ##to find out the current telegram.Bot Object being used
-    if update.message.text:
-        try:
-            bot.send_message(
-                text=update.message.text,
-                chat_id=players[playerName].mortal.chat_id
-            )
-        except:
-            update.message.reply_text(messagesdualbot.STOPPED_BOT(configdualbot.MORTAL_ALIAS))
-            return CHOOSING
-    else:
-        sendNonTextMessage(update.message, bot, players[playerName].mortal.chat_id, MORTAL_BOT_TOKEN)
-
-    update.message.reply_text(messagesdualbot.MESSAGE_SENT)
+    if update.message.reply_to_message:
+        # try:
+            if update.message.reply_to_message.from_user.username.lower() == playerName:
+                reply_message = update.message.reply_to_message.text
+                list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
+                                                                         update.effective_message.reply_to_message.text,
+                                                                         update.effective_message.entities, len(configdualbot.ANGEL_ALIAS))
+                bot.send_message(
+                    text=f"{update.message.text}\n\n"
+                         f"|  In reply to:\n"
+                         f"|  Your {configdualbot.ANGEL_ALIAS}\n"
+                         f"|  {reply_message}",
+                    entities=list_of_entities,
+                    chat_id=players[playerName].mortal.chat_id
+                )
+            elif update.message.reply_to_message.from_user.is_bot is True:
+                reply_message = update.message.reply_to_message.text
+                # bot.send_message(
+                #     text=f"\n<b>|</b>  <u>Replying to:</u>\n"
+                #          f"<b>|  You</b>\n"
+                #          f"<b>|</b>  <i>{reply_message}</i>\n\n"
+                #          f"{update.message.text}",
+                #     entities=update.message.entities,
+                #     chat_id=players[playerName].mortal.chat_id
+                # )
+                list_of_entities = messagesdualbot.getMessageEntitybyYou(update.effective_message.text, update.effective_message.reply_to_message.text, update.effective_message.entities)
+                bot.send_message(
+                    text=f"{update.message.text}\n\n"
+                         f"|  In reply to:\n"
+                         f"|  You\n"
+                         f"|  {reply_message}",
+                    entities=list_of_entities,
+                    chat_id=players[playerName].mortal.chat_id
+                )
+        # except:
+        #     update.message.reply_text(messagesdualbot.STOPPED_BOT(configdualbot.MORTAL_ALIAS))
+        #     return CHOOSING
+    # if update.message.text:
+    #     # try: ### Note if you use entities, DO NOT use parse_mode - it will cause entities to be ignored
+    #         bot.send_message(
+    #             text=f"{update.message.text}",
+    #             entities=update.message.entities,
+    #             chat_id=players[playerName].mortal.chat_id
+    #         )
+    #         print(update.message.entities)
+    #     # except:
+    #     #     update.message.reply_text(messagesdualbot.STOPPED_BOT(configdualbot.MORTAL_ALIAS))
+    #     #     return CHOOSING
+    # else:
+    #     sendNonTextMessage(update.message, bot, players[playerName].mortal.chat_id, MORTAL_BOT_TOKEN)
+    # print(update.message.reply_to_message)
+    # logger.info(update.message.reply_to_message)
+    # update.message.reply_text(messagesdualbot.MESSAGE_SENT)
 
     logger.info(
         messagesdualbot.getSentMessageLog(configdualbot.MORTAL_ALIAS, playerName, players[playerName].mortal.username))
@@ -558,16 +599,16 @@ def main():
     # dispatcherAngel.add_handler(conv_handler_Angel)
 
     # Start the Bot
-    # updaterMortal.start_polling()
+    updaterMortal.start_polling()
     # updaterAngel.start_polling()
     '''
     The next paragraph of codes replace "updater.start_polling()" 
     to enable listening to webhooks on heroku. See https://towardsdatascience.com/how-to-deploy-a-telegram-bot-using-heroku-for-free-9436f89575d2 for information.
     '''
-    updaterMortal.start_webhook(listen="0.0.0.0",
-                          port=PORT,
-                          url_path=MORTAL_BOT_TOKEN,
-                          webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
+    # updaterMortal.start_webhook(listen="0.0.0.0",
+    #                       port=PORT,
+    #                       url_path=MORTAL_BOT_TOKEN,
+    #                       webhook_url=f'https://{herokuappname}.herokuapp.com/{MORTAL_BOT_TOKEN}')
 
     # updaterAngel.start_webhook(listen="0.0.0.0",
     #                       port=PORT,
