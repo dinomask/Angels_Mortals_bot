@@ -462,7 +462,6 @@ def sendMortal(update: Update, context: CallbackContext, bot=angelbot):
     # logger.info(f'{context.bot}') ##to find out the current telegram.Bot Object being used
     try:
         if update.effective_message.reply_to_message:
-            print(update.effective_message.reply_to_message.text)
             if update.effective_message.reply_to_message.text is not None:
                 if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
                     reply_message = update.effective_message.reply_to_message.text
@@ -490,7 +489,6 @@ def sendMortal(update: Update, context: CallbackContext, bot=angelbot):
                     )
             else:
                 if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
-                    reply_message = update.effective_message.reply_to_message.text
                     list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
                                                                                    "<File>",
                                                                                    update.effective_message.entities,
