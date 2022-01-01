@@ -1,3 +1,5 @@
+import copy
+
 import configdualbot
 from telegram import messageentity
 
@@ -59,7 +61,7 @@ def getMessageEntitybyYou(UpdateMessageText, UpdateReplyToMessageText, UpdateMes
     # print(max_length_reply_message)
     offset_length_before_reply_message = effective_message_max_offset_length + 28  ##28 is the number of char in bot.send_message with reply, "You" template
     # print(offset_length_before_reply_message)
-    list_of_entities = UpdateMessageEntities
+    list_of_entities = copy.deepcopy(UpdateMessageEntities)
     bold_entity01 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 26,
                                                          length=1)
     bold_entity02 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 10,
@@ -84,7 +86,7 @@ def getMessageEntitybyYourALIAS(UpdateMessageText, UpdateReplyToMessageText, Upd
     # print(max_length_reply_message)
     offset_length_before_reply_message = effective_message_max_offset_length + 30 + LenALIAS  ##30 + LenALIAS is the number of char in bot.send_message with reply, "You" template
     # print(offset_length_before_reply_message)
-    list_of_entities = UpdateMessageEntities
+    list_of_entities = copy.deepcopy(UpdateMessageEntities)
     bold_entity01 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 28 - LenALIAS,
                                                          length=1)
     bold_entity02 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 12 - LenALIAS,
