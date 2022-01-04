@@ -54,7 +54,6 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 ![Buttons & Responses in Mortal Bot](AngelsMortalsBotPictures/buttonsMortalBot.png)\
 ***Buttons & Responses in Mortal Bot***
 
-
 3. Ability to feedback to the Game Master.
 - The Game Master's chat id will be used by the bot.
 - A support request can be sent either through the Angel Bot or Mortal Bot
@@ -80,6 +79,17 @@ if you send a message to the Angel Bot, your angel receives it on the Mortal Bot
 
 ![non-Game Master player cannot use the restricted commands](AngelsMortalsBotPictures/nonGameMasterdisallowed.png)\
 ***A non-Game Master player cannot use the restricted commands***
+
+5. **NEW REPLY FUNCTION** for easier anonymous text messaging.
+
+![My Angel replying messages](AngelsMortalsBotPictures/reply01text.png)\
+***My Angel replying messages***
+
+![My Angel replying with a sticker](AngelsMortalsBotPictures/reply02sticker.png)\
+***My Angel replying with a sticker***
+
+![My Angel replying a file or photo](AngelsMortalsBotPictures/reply03file.png)\
+***My Angel replying a file or photo***
 
 ## Instructions
 
