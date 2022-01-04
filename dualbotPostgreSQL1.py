@@ -498,6 +498,91 @@ def sendAngel(update: Update, context: CallbackContext, bot=mortalbot):
                             entities=list_of_entities,
                             chat_id=players[playerName].angel.chat_id
                         )
+            elif update.effective_message.reply_to_message.sticker is not None:
+                if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
+                    if update.effective_message.sticker is not None:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS_NoText(
+                            "<Sticker>",
+                            update.effective_message.entities,
+                            len(configdualbot.MORTAL_ALIAS))
+                        bot.send_message(
+                            text=f"|  In reply to:\n"
+                                 f"|  Your {configdualbot.MORTAL_ALIAS}\n"
+                                 f"|  <Sticker>",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].angel.chat_id
+                        )
+                        bot.send_sticker(
+                            sticker=update.effective_message.sticker,
+                            chat_id=players[playerName].angel.chat_id
+                        )
+                    else:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
+                                                                                       "<Sticker>",
+                                                                                       update.effective_message.entities,
+                                                                                       len(configdualbot.MORTAL_ALIAS))
+                        bot.send_message(
+                            text=f"{update.effective_message.text}\n\n"
+                                 f"|  In reply to:\n"
+                                 f"|  Your {configdualbot.MORTAL_ALIAS}\n"
+                                 f"|  <Sticker>",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].angel.chat_id
+                        )
+                elif update.effective_message.reply_to_message.from_user.is_bot is True:
+                    if update.effective_message.sticker is not None:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYou_NoText(
+                            "<Sticker>",
+                            update.effective_message.entities)
+                        bot.send_message(
+                            text=f"|  In reply to:\n"
+                                 f"|  You\n"
+                                 f"|  <Sticker>",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].angel.chat_id
+                        )
+                        bot.send_sticker(
+                            sticker=update.effective_message.sticker,
+                            chat_id=players[playerName].angel.chat_id
+                        )
+                    else:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYou(update.effective_message.text,
+                                                                                       "<Sticker>",
+                                                                                       update.effective_message.entities)
+                        bot.send_message(
+                            text=f"{update.effective_message.text}\n\n"
+                                 f"|  In reply to:\n"
+                                 f"|  You\n"
+                                 f"|  <Sticker>",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].angel.chat_id
+                        )
+            elif update.effective_message.reply_to_message.photo is not None:
+                if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
+                    list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
+                                                                                   "<Photo>",
+                                                                                   update.effective_message.entities,
+                                                                                   len(configdualbot.MORTAL_ALIAS))
+                    bot.send_message(
+                        text=f"{update.effective_message.text}\n\n"
+                             f"|  In reply to:\n"
+                             f"|  Your {configdualbot.MORTAL_ALIAS}\n"
+                             f"|  <Photo>",
+                        entities=list_of_entities,
+                        chat_id=players[playerName].angel.chat_id
+                    )
+                elif update.effective_message.reply_to_message.from_user.is_bot is True:
+                    list_of_entities = messagesdualbot.getMessageEntitybyYou(update.effective_message.text,
+                                                                             "<Photo>",
+                                                                             update.effective_message.entities)
+                    bot.send_message(
+                        text=f"{update.effective_message.text}\n\n"
+                             f"|  In reply to:\n"
+                             f"|  You\n"
+                             f"|  <Photo>",
+                        entities=list_of_entities,
+                        chat_id=players[playerName].angel.chat_id
+                    )
             else:
                 if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
                     list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
@@ -544,112 +629,196 @@ def sendAngel(update: Update, context: CallbackContext, bot=mortalbot):
 
 def sendMortal(update: Update, context: CallbackContext, bot=angelbot):
     playerName = update.effective_message.chat.username.lower()
-    logger.info(update.effective_message)
-    # try:
-    if update.effective_message.reply_to_message:
-        if update.effective_message.reply_to_message.text is not None:
-            if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
-                reply_message = update.effective_message.reply_to_message.text.split("|  In reply to:")[0].strip()
-                if update.effective_message.sticker is not None:
-                    list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS_NoText(
-                        reply_message,
-                        update.effective_message.entities,
-                        len(configdualbot.ANGEL_ALIAS))
-                    bot.send_message(
-                        text=f"|  In reply to:\n"
-                             f"|  Your {configdualbot.ANGEL_ALIAS}\n"
-                             f"|  {reply_message}",
-                        entities=list_of_entities,
-                        chat_id=players[playerName].mortal.chat_id
-                    )
-                    bot.send_sticker(
-                        sticker=update.effective_message.sticker,
-                        chat_id=players[playerName].mortal.chat_id
-                    )
-                else:
+    try:
+        if update.effective_message.reply_to_message:
+            if update.effective_message.reply_to_message.text is not None:
+                if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
+                    reply_message = update.effective_message.reply_to_message.text.split("|  In reply to:")[0].strip()
+                    if update.effective_message.sticker is not None:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS_NoText(
+                            reply_message,
+                            update.effective_message.entities,
+                            len(configdualbot.ANGEL_ALIAS))
+                        bot.send_message(
+                            text=f"|  In reply to:\n"
+                                 f"|  Your {configdualbot.ANGEL_ALIAS}\n"
+                                 f"|  {reply_message}",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                        bot.send_sticker(
+                            sticker=update.effective_message.sticker,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                    else:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
+                                                                                   reply_message,
+                                                                                   update.effective_message.entities,
+                                                                                   len(configdualbot.ANGEL_ALIAS))
+                        bot.send_message(
+                            text=f"{update.effective_message.text}\n\n"
+                                 f"|  In reply to:\n"
+                                 f"|  Your {configdualbot.ANGEL_ALIAS}\n"
+                                 f"|  {reply_message}",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                elif update.effective_message.reply_to_message.from_user.is_bot is True:
+                    reply_message = update.effective_message.reply_to_message.text.split("|  In reply to:")[0].strip()
+                    if update.effective_message.sticker is not None:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYou_NoText(
+                            reply_message,
+                            update.effective_message.entities)
+                        bot.send_message(
+                            text=f"|  In reply to:\n"
+                                 f"|  You\n"
+                                 f"|  {reply_message}",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                        bot.send_sticker(
+                            sticker=update.effective_message.sticker,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                    else:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYou(update.effective_message.text,
+                                                                                 reply_message,
+                                                                                 update.effective_message.entities)
+                        bot.send_message(
+                            text=f"{update.effective_message.text}\n\n"
+                                 f"|  In reply to:\n"
+                                 f"|  You\n"
+                                 f"|  {reply_message}",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+            elif update.effective_message.reply_to_message.sticker is not None:
+                if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
+                    if update.effective_message.sticker is not None:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS_NoText(
+                            "<Sticker>",
+                            update.effective_message.entities,
+                            len(configdualbot.ANGEL_ALIAS))
+                        bot.send_message(
+                            text=f"|  In reply to:\n"
+                                 f"|  Your {configdualbot.ANGEL_ALIAS}\n"
+                                 f"|  <Sticker>",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                        bot.send_sticker(
+                            sticker=update.effective_message.sticker,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                    else:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
+                                                                                   "<Sticker>",
+                                                                                   update.effective_message.entities,
+                                                                                   len(configdualbot.ANGEL_ALIAS))
+                        bot.send_message(
+                            text=f"{update.effective_message.text}\n\n"
+                                 f"|  In reply to:\n"
+                                 f"|  Your {configdualbot.ANGEL_ALIAS}\n"
+                                 f"|  <Sticker>",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                elif update.effective_message.reply_to_message.from_user.is_bot is True:
+                    if update.effective_message.sticker is not None:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYou_NoText(
+                            "<Sticker>",
+                            update.effective_message.entities)
+                        bot.send_message(
+                            text=f"|  In reply to:\n"
+                                 f"|  You\n"
+                                 f"|  <Sticker>",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                        bot.send_sticker(
+                            sticker=update.effective_message.sticker,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+                    else:
+                        list_of_entities = messagesdualbot.getMessageEntitybyYou(update.effective_message.text,
+                                                                                   "<Sticker>",
+                                                                                   update.effective_message.entities)
+                        bot.send_message(
+                            text=f"{update.effective_message.text}\n\n"
+                                 f"|  In reply to:\n"
+                                 f"|  You\n"
+                                 f"|  <Sticker>",
+                            entities=list_of_entities,
+                            chat_id=players[playerName].mortal.chat_id
+                        )
+            elif update.effective_message.reply_to_message.photo is not None:
+                if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
                     list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
-                                                                               reply_message,
-                                                                               update.effective_message.entities,
-                                                                               len(configdualbot.ANGEL_ALIAS))
+                                                                                   "<Photo>",
+                                                                                   update.effective_message.entities,
+                                                                                   len(configdualbot.ANGEL_ALIAS))
                     bot.send_message(
                         text=f"{update.effective_message.text}\n\n"
                              f"|  In reply to:\n"
                              f"|  Your {configdualbot.ANGEL_ALIAS}\n"
-                             f"|  {reply_message}",
+                             f"|  <Photo>",
                         entities=list_of_entities,
                         chat_id=players[playerName].mortal.chat_id
                     )
-            elif update.effective_message.reply_to_message.from_user.is_bot is True:
-                reply_message = update.effective_message.reply_to_message.text.split("|  In reply to:")[0].strip()
-                if update.effective_message.sticker is not None:
-                    list_of_entities = messagesdualbot.getMessageEntitybyYou_NoText(
-                        reply_message,
-                        update.effective_message.entities)
-                    bot.send_message(
-                        text=f"|  In reply to:\n"
-                             f"|  You\n"
-                             f"|  {reply_message}",
-                        entities=list_of_entities,
-                        chat_id=players[playerName].mortal.chat_id
-                    )
-                    bot.send_sticker(
-                        sticker=update.effective_message.sticker,
-                        chat_id=players[playerName].mortal.chat_id
-                    )
-                else:
+                elif update.effective_message.reply_to_message.from_user.is_bot is True:
                     list_of_entities = messagesdualbot.getMessageEntitybyYou(update.effective_message.text,
-                                                                             reply_message,
+                                                                             "<Photo>",
                                                                              update.effective_message.entities)
                     bot.send_message(
                         text=f"{update.effective_message.text}\n\n"
                              f"|  In reply to:\n"
                              f"|  You\n"
-                             f"|  {reply_message}",
+                             f"|  <Photo>",
                         entities=list_of_entities,
                         chat_id=players[playerName].mortal.chat_id
                     )
+            else:
+                if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
+                    list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
+                                                                                   "<File>",
+                                                                                   update.effective_message.entities,
+                                                                                   len(configdualbot.ANGEL_ALIAS))
+                    bot.send_message(
+                        text=f"{update.effective_message.text}\n\n"
+                             f"|  In reply to:\n"
+                             f"|  Your {configdualbot.ANGEL_ALIAS}\n"
+                             f"|  <File>",
+                        entities=list_of_entities,
+                        chat_id=players[playerName].mortal.chat_id
+                    )
+                elif update.effective_message.reply_to_message.from_user.is_bot is True:
+                    list_of_entities = messagesdualbot.getMessageEntitybyYou(update.effective_message.text,
+                                                                             "<File>",
+                                                                             update.effective_message.entities)
+                    bot.send_message(
+                        text=f"{update.effective_message.text}\n\n"
+                             f"|  In reply to:\n"
+                             f"|  You\n"
+                             f"|  <File>",
+                        entities=list_of_entities,
+                        chat_id=players[playerName].mortal.chat_id
+                    )
+            logger.info(f"{update.effective_message.chat.username} sent to {players[playerName].mortal.username} a reply Text Message on Bot {context.bot.username}, {context.bot.first_name}.")
+        elif update.effective_message.text:
+            ### Note if you use entities, DO NOT use parse_mode - it will cause entities to be ignored
+            bot.send_message(
+                text=f"{update.effective_message.text}",
+                entities=update.effective_message.entities,
+                chat_id=players[playerName].mortal.chat_id
+            )
+            logger.info(f"{update.effective_message.chat.username} sent to {players[playerName].mortal.username} a Text Message on Bot {context.bot.username}, {context.bot.first_name}.")
         else:
-            if update.effective_message.reply_to_message.from_user.username.lower() == playerName:
-                list_of_entities = messagesdualbot.getMessageEntitybyYourALIAS(update.effective_message.text,
-                                                                               "<File>",
-                                                                               update.effective_message.entities,
-                                                                               len(configdualbot.ANGEL_ALIAS))
-                bot.send_message(
-                    text=f"{update.effective_message.text}\n\n"
-                         f"|  In reply to:\n"
-                         f"|  Your {configdualbot.ANGEL_ALIAS}\n"
-                         f"|  <File>",
-                    entities=list_of_entities,
-                    chat_id=players[playerName].mortal.chat_id
-                )
-            elif update.effective_message.reply_to_message.from_user.is_bot is True:
-                list_of_entities = messagesdualbot.getMessageEntitybyYou(update.effective_message.text,
-                                                                         "<File>",
-                                                                         update.effective_message.entities)
-                bot.send_message(
-                    text=f"{update.effective_message.text}\n\n"
-                         f"|  In reply to:\n"
-                         f"|  You\n"
-                         f"|  <File>",
-                    entities=list_of_entities,
-                    chat_id=players[playerName].mortal.chat_id
-                )
-        logger.info(f"{update.effective_message.chat.username} sent to {players[playerName].mortal.username} a reply Text Message on Bot {context.bot.username}, {context.bot.first_name}.")
-    elif update.effective_message.text:
-        ### Note if you use entities, DO NOT use parse_mode - it will cause entities to be ignored
-        bot.send_message(
-            text=f"{update.effective_message.text}",
-            entities=update.effective_message.entities,
-            chat_id=players[playerName].mortal.chat_id
-        )
-        logger.info(f"{update.effective_message.chat.username} sent to {players[playerName].mortal.username} a Text Message on Bot {context.bot.username}, {context.bot.first_name}.")
-    else:
-        sendNonTextMessage(update.effective_message, bot, players[playerName].mortal.chat_id, MORTAL_BOT_TOKEN)
-    update.effective_message.reply_text(messagesdualbot.MESSAGE_SENT)
-    return MORTAL
-    # except:
-    #     update.effective_message.reply_text(messagesdualbot.STOPPED_BOT(configdualbot.MORTAL_ALIAS))
-    #     return MORTAL
+            sendNonTextMessage(update.effective_message, bot, players[playerName].mortal.chat_id, MORTAL_BOT_TOKEN)
+        update.effective_message.reply_text(messagesdualbot.MESSAGE_SENT)
+        return MORTAL
+    except:
+        update.effective_message.reply_text(messagesdualbot.STOPPED_BOT(configdualbot.MORTAL_ALIAS))
+        return MORTAL
 
 
 
