@@ -85,15 +85,15 @@ def getMessageEntitybyYourALIAS(UpdateMessageText, UpdateReplyToMessageText, Upd
     UpdateReplyToMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateReplyToMessageText, 'unicode-escape'))
     x2 = UpdateReplyToMessageText_toUnicodeStr.count('\\')
     effective_message_max_offset_length = len(UpdateMessageText) + x1
-    print(UpdateMessageText_toUnicodeStr)
-    print(UpdateReplyToMessageText_toUnicodeStr)
-    print(f"x1 " + str(x1))
-    print(f"x2 " + str(x2))
-    print(effective_message_max_offset_length)
     max_length_reply_message = len(UpdateReplyToMessageText) + x2
-    print(max_length_reply_message)
+    # print(UpdateMessageText_toUnicodeStr)
+    # print(UpdateReplyToMessageText_toUnicodeStr)
+    # print(f"x1 " + str(x1))
+    # print(f"x2 " + str(x2))
+    # print(effective_message_max_offset_length)
+    # print(max_length_reply_message)
     offset_length_before_reply_message = effective_message_max_offset_length + 30 + LenALIAS  ##30 + LenALIAS is the number of char in bot.send_message with reply, "You" template
-    print(offset_length_before_reply_message)
+    # print(offset_length_before_reply_message)
     list_of_entities = copy.deepcopy(UpdateMessageEntities)
     bold_entity01 = messageentity.MessageEntity(type="bold", offset=offset_length_before_reply_message - 28 - LenALIAS,
                                                          length=1)
