@@ -25,7 +25,7 @@ ERROR_CHAT_ID = f'Sorry an error occurred please type /start again'
 # SEND_COMMAND = f'Send a message to my:\n'
 NOT_REGISTERED = f'Sorry you are not registered with the game currently'
 def STOPPED_BOT(alias):
-    return f'Sorry your {alias} has stopped the bot. He/she must restart it for your messages to be sent.\n\nYou may now click the other buttons.'
+    return f'Sorry, your message could not be sent. Either you have made an illegal message, or your {alias} has stopped the bot. They must restart it for your messages to be sent.\n\nPlease type your message again.'
 
 def getBotNotStartedMessage(alias):
     return f'Sorry your {alias} has not started this bot yet.\n' \
