@@ -544,6 +544,7 @@ def sendAngel(update: Update, context: CallbackContext, bot=mortalbot):
 
 def sendMortal(update: Update, context: CallbackContext, bot=angelbot):
     playerName = update.effective_message.chat.username.lower()
+    logger.info(update.effective_message)
     # try:
     if update.effective_message.reply_to_message:
         if update.effective_message.reply_to_message.text is not None:
