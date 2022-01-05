@@ -98,8 +98,6 @@ def getMessageEntitybyYourALIAS(UpdateMessageText: str, UpdateReplyToMessageText
     y2 = sum(map(UpdateReplyToMessageText.count, ['…', '’', '‘', '“', '”', '\n']))
     effective_message_max_offset_length = len(UpdateMessageText) + x1 - y1
     max_length_reply_message = len(UpdateReplyToMessageText) + x2 - y2
-    # print(str(y1))
-    # print(str(y2))
     print(UpdateMessageText_toUnicodeStr)
     print(UpdateReplyToMessageText_toUnicodeStr)
     print(f"x1 " + str(x1))
