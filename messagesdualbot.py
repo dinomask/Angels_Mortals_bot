@@ -54,13 +54,15 @@ def getSentMessageLog(alias, sender, receiver):
 def getNotRegisteredLog(alias, sender, receiver):
     return f'{sender} {alias} {receiver} has not started the bot'
 
-def getMessageEntitybyYou(UpdateMessageText, UpdateReplyToMessageText, UpdateMessageEntities):
+def getMessageEntitybyYou(UpdateMessageText: str, UpdateReplyToMessageText: str, UpdateMessageEntities):
     UpdateMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateMessageText, 'unicode-escape'))
     x1 = UpdateMessageText_toUnicodeStr.count('\\')
+    y1 = UpdateMessageText.count('…')
     UpdateReplyToMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateReplyToMessageText, 'unicode-escape'))
     x2 = UpdateReplyToMessageText_toUnicodeStr.count('\\')
-    effective_message_max_offset_length = len(UpdateMessageText) + x1
-    max_length_reply_message = len(UpdateReplyToMessageText) + x2
+    y2 = UpdateReplyToMessageText.count('…')
+    effective_message_max_offset_length = len(UpdateMessageText) + x1 - y1
+    max_length_reply_message = len(UpdateReplyToMessageText) + x2 - y2
     # print(UpdateMessageText_toUnicodeStr)
     # print(UpdateReplyToMessageText_toUnicodeStr)
     # print(f"x1 " + str(x1))
@@ -87,19 +89,23 @@ def getMessageEntitybyYou(UpdateMessageText, UpdateReplyToMessageText, UpdateMes
     list_of_entities.append(underline_entity)
     return list_of_entities
 
-def getMessageEntitybyYourALIAS(UpdateMessageText, UpdateReplyToMessageText, UpdateMessageEntities, LenALIAS):
+def getMessageEntitybyYourALIAS(UpdateMessageText: str, UpdateReplyToMessageText: str, UpdateMessageEntities, LenALIAS):
     UpdateMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateMessageText, 'unicode-escape'))
     x1 = UpdateMessageText_toUnicodeStr.count('\\')
+    y1 = UpdateMessageText.count('…')
     UpdateReplyToMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateReplyToMessageText, 'unicode-escape'))
     x2 = UpdateReplyToMessageText_toUnicodeStr.count('\\')
-    effective_message_max_offset_length = len(UpdateMessageText) + x1
-    max_length_reply_message = len(UpdateReplyToMessageText) + x2
-    # print(UpdateMessageText_toUnicodeStr)
-    # print(UpdateReplyToMessageText_toUnicodeStr)
-    # print(f"x1 " + str(x1))
-    # print(f"x2 " + str(x2))
-    # print(effective_message_max_offset_length)
-    # print(max_length_reply_message)
+    y2 = UpdateReplyToMessageText.count('…')
+    effective_message_max_offset_length = len(UpdateMessageText) + x1 - y1
+    max_length_reply_message = len(UpdateReplyToMessageText) + x2 - y2
+    # print(str(y1))
+    # print(str(y2))
+    print(UpdateMessageText_toUnicodeStr)
+    print(UpdateReplyToMessageText_toUnicodeStr)
+    print(f"x1 " + str(x1))
+    print(f"x2 " + str(x2))
+    print(effective_message_max_offset_length)
+    print(max_length_reply_message)
     offset_length_before_reply_message = effective_message_max_offset_length + 30 + LenALIAS  ##30 + LenALIAS is the number of char in bot.send_message with reply, "You" template
     # print(offset_length_before_reply_message)
     list_of_entities = copy.deepcopy(UpdateMessageEntities)
@@ -120,10 +126,11 @@ def getMessageEntitybyYourALIAS(UpdateMessageText, UpdateReplyToMessageText, Upd
     list_of_entities.append(underline_entity)
     return list_of_entities
 
-def getMessageEntitybyYou_NoText(UpdateReplyToMessageText, UpdateMessageEntities):
+def getMessageEntitybyYou_NoText(UpdateReplyToMessageText: str, UpdateMessageEntities):
     UpdateReplyToMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateReplyToMessageText, 'unicode-escape'))
     x2 = UpdateReplyToMessageText_toUnicodeStr.count('\\')
-    max_length_reply_message = len(UpdateReplyToMessageText) + x2
+    y2 = UpdateReplyToMessageText.count('…')
+    max_length_reply_message = len(UpdateReplyToMessageText) + x2 - y2
     # print(max_length_reply_message)
     offset_length_before_reply_message = 26  ##26 is the number of char in bot.send_message with reply, "You" template
     # print(offset_length_before_reply_message)
@@ -145,10 +152,11 @@ def getMessageEntitybyYou_NoText(UpdateReplyToMessageText, UpdateMessageEntities
     list_of_entities.append(underline_entity)
     return list_of_entities
 
-def getMessageEntitybyYourALIAS_NoText(UpdateReplyToMessageText, UpdateMessageEntities, LenALIAS):
+def getMessageEntitybyYourALIAS_NoText(UpdateReplyToMessageText: str, UpdateMessageEntities, LenALIAS):
     UpdateReplyToMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateReplyToMessageText, 'unicode-escape'))
     x2 = UpdateReplyToMessageText_toUnicodeStr.count('\\')
-    max_length_reply_message = len(UpdateReplyToMessageText) + x2
+    y2 = UpdateReplyToMessageText.count('…')
+    max_length_reply_message = len(UpdateReplyToMessageText) + x2 - y2
     # print(max_length_reply_message)
     offset_length_before_reply_message = 28 + LenALIAS  ##28 + LenALIAS is the number of char in bot.send_message with reply, "You" template
     # print(offset_length_before_reply_message)
