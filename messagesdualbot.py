@@ -57,7 +57,7 @@ def getNotRegisteredLog(alias, sender, receiver):
 def getMessageEntitybyYou(UpdateMessageText: str, UpdateReplyToMessageText: str, UpdateMessageEntities):
     UpdateMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateMessageText, 'unicode-escape'))
     x1 = sum(map(UpdateMessageText_toUnicodeStr.count, ['\\']))
-    y1 = sum(map(UpdateReplyToMessageText.count, ['…', '’', '‘', '“', '”', '\n']))
+    y1 = sum(map(UpdateMessageText.count, ['…', '’', '‘', '“', '”', '\n']))
     UpdateReplyToMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateReplyToMessageText, 'unicode-escape'))
     x2 = sum(map(UpdateReplyToMessageText_toUnicodeStr.count, ['\\']))
     y2 = sum(map(UpdateReplyToMessageText.count, ['…', '’', '‘', '“', '”', '\n']))
@@ -92,7 +92,7 @@ def getMessageEntitybyYou(UpdateMessageText: str, UpdateReplyToMessageText: str,
 def getMessageEntitybyYourALIAS(UpdateMessageText: str, UpdateReplyToMessageText: str, UpdateMessageEntities, LenALIAS):
     UpdateMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateMessageText, 'unicode-escape'))
     x1 = sum(map(UpdateMessageText_toUnicodeStr.count, ['\\']))
-    y1 = sum(map(UpdateReplyToMessageText.count, ['…', '’', '‘', '“', '”', '\n']))
+    y1 = sum(map(UpdateMessageText.count, ['…', '’', '‘', '“', '”', '\n']))
     UpdateReplyToMessageText_toUnicodeStr = bytes.decode(str.encode(UpdateReplyToMessageText, 'unicode-escape'))
     x2 = sum(map(UpdateReplyToMessageText_toUnicodeStr.count, ['\\']))
     y2 = sum(map(UpdateReplyToMessageText.count, ['…', '’', '‘', '“', '”', '\n']))
